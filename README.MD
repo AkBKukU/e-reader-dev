@@ -10,9 +10,10 @@ new software.
 
 ## Understanding The Development Tools
 
-The dev tools usable for the E-Reader can be split into two categories:
+The dev tools usable for the E-Reader can be split into three categories:
  - GBA Development
  - E-Reader Conversion Tools
+ - General GBA Dev Tools
 
 The E-Reader has several execution modes, most notably it can run as an NES
 or as a GBA. If you stick with the GBA mode you can use the standard open
@@ -20,7 +21,7 @@ source GBA developement toolchain. The main difference is linking in some
 decicated E-Reader features that are availble. These give you some generic
 assets to save executable space and reduce the card count.
 
-## GBA Toolchain
+## GBA Developement
 
 The recommended toolchain is (DevKitPro)[https://devkitpro.org] which supports
 targeting multiple devices. But we are intersted in the GBA ARM toolchain for
@@ -48,6 +49,35 @@ This sets up environment variables for you to use in your dev processes:
 
 	export DEVKITPRO=/opt/devkitpro
 	export DEVKITARM=${DEVKITPRO}/devkitARM
-	export PATH=${DEVKITPRO}/tools/bin:$PATH       
+	export PATH=${DEVKITPRO}/tools/bin:$PATH     
+
+The `$DEVKITARM/bin` directory contains the `gcc` tools for compiling C/C++ code
+for the GBA. 
+
+## E-Reader Conversion Tools
+
+Once you have a valid GBA binary you need to convert it to work on the E-Reader.
+There is a version of the tools available for (multiple platforms)[https://github.com/breadbored/nedclib]
+Downloading and compiling these tools will give you nearly everything you need
+to create usable E-Reader cards.
+
+With the tools, there are a few steps to this process:
+
+ 1. `nevpk` - VPK Compression
+ 2. `nedcmake` - Dot Code binary generation
+ 3. `nedcenc` - Dot Code Encoding
+ 4. `raw2bmp` - Dot Code image generation
+
+These steps are best done as part of a build process after compiling with GCC
+and make sense to include in a MakeFile. They generally each take the output as
+the input to the next step. There is a variance when your program becomes large
+enough to split across multiple cards (which I am not able to cover yet.)
+
+
+
+
+
+
+
 
 
