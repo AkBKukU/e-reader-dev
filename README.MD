@@ -73,7 +73,10 @@ and make sense to include in a MakeFile. They generally each take the output as
 the input to the next step. There is a variance when your program becomes large
 enough to split across multiple cards (which I am not able to cover yet.)
 
-
+There is one alternative step 2 you can do when doing development. Using 
+[neflashmaker](https://www.caitsith2.com/ereader/tools/neflashmaker10.zip)
+will encode the program in a way GBA emulators can load as game save data. The 
+E-Reader can store software on it, and this can "inject" your program into it.
 
 
 
