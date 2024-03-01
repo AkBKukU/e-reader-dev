@@ -11,9 +11,9 @@ new software.
 ## Understanding The Development Tools
 
 The dev tools usable for the E-Reader can be split into three categories:
- - [GBA Development](#GBA Development)
- - [E-Reader Conversion Tools](#E-Reader Conversion Tools)
- - [General GBA Dev Tools](#General GBA Dev Tools)
+ - [GBA Development](./#GBA Development)
+ - [E-Reader Conversion Tools](./#E-Reader Conversion Tools)
+ - [General GBA Dev Tools](./#General GBA Dev Tools)
 
 The E-Reader has several execution modes, most notably it can run as an NES
 or as a GBA. If you stick with the GBA mode you can use the standard open
