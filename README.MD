@@ -91,8 +91,8 @@ data.
 A few programs for working with graphics that convert them into compatible 
 formats or directly into C array files.
 
-	- [gfx2gba](https://www.gbadev.org/tools.php?showinfo=142) & [b2x](http://www.devrs.com/gb/files/b2x.zip) - GBA graphics conversion and c array encoder
-	- [png2raw](https://github.com/IanFinlayson/png2gba) - Direct PNG to C array encoder
+ - [gfx2gba](https://www.gbadev.org/tools.php?showinfo=142) & [b2x](http://www.devrs.com/gb/files/b2x.zip) - GBA graphics conversion and c array encoder
+ - [png2raw](https://github.com/IanFinlayson/png2gba) - Direct PNG to C array encoder
 
 
 ### Sound
