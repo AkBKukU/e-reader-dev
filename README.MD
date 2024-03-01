@@ -23,13 +23,13 @@ assets to save executable space and reduce the card count.
 
 ## GBA Developement
 
-The recommended toolchain is (DevKitPro)[https://devkitpro.org] which supports
+The recommended toolchain is [DevKitPro](https://devkitpro.org) which supports
 targeting multiple devices. But we are intersted in the GBA ARM toolchain for
 this.
 
 ### Installation
 
-DevKitPro has an annoying and inflexible (setup process)[https://devkitpro.org/wiki/devkitPro_pacman#Debian_and_derivatives] 
+DevKitPro has an annoying and inflexible [setup process](https://devkitpro.org/wiki/devkitPro_pacman#Debian_and_derivatives)
 rather than distributting binaries.
 
 The TL;DR to get it usable for E-Reader GBA Dev is the following:
@@ -57,7 +57,7 @@ for the GBA.
 ## E-Reader Conversion Tools
 
 Once you have a valid GBA binary you need to convert it to work on the E-Reader.
-There is a version of the tools available for (multiple platforms)[https://github.com/breadbored/nedclib]
+There is a version of the tools available for [multiple platforms](https://github.com/breadbored/nedclib)
 Downloading and compiling these tools will give you nearly everything you need
 to create usable E-Reader cards.
 
