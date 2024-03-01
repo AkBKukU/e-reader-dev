@@ -44,7 +44,13 @@ The recommended toolchain is [DevKitPro](https://devkitpro.org) which supports
 targeting multiple devices. But we are intersted in the GBA ARM toolchain for
 this.
 
-### Installation
+The easiest way to test your code is with an emulator, [mGBA](https://mgba.io/)
+works very well for this. It supports loading save data as well as directly 
+loading  Dot Code data stored in BMP image files. mGBA even supports debugging
+with a [gdb server](https://felixjones.co.uk/mgba_gdb/vscode.html).
+
+
+### Toolchain Installation
 
 DevKitPro has an annoying and inflexible [setup process](https://devkitpro.org/wiki/devkitPro_pacman#Debian_and_derivatives)
 rather than distributting binaries.
