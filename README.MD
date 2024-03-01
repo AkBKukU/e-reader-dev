@@ -79,8 +79,32 @@ will encode the program in a way GBA emulators can load as game save data. The
 E-Reader can store software on it, and this can "inject" your program into it.
 
 
+## General GBA Dev Tools
+
+Other Dev tools for the GBA can be helpful for importing assets like graphics 
+and sound. Because the GBA is a monolithic ROM based system, assets are embedded
+in the main executable. This is usually done as arrays of bytes holding the raw
+data.
+
+### Graphics
+
+A few programs for working with graphics that convert them into compatible 
+formats or directly into C array files.
+
+	- [gfx2gba](https://www.gbadev.org/tools.php?showinfo=142) & [b2x](http://www.devrs.com/gb/files/b2x.zip) - GBA graphics conversion and c array encoder
+	- [png2raw](https://github.com/IanFinlayson/png2gba) - Direct PNG to C array encoder
 
 
+### Sound
 
+Sound is 8 bit signed PCM and does not have a fixed sample rate. You don't need
+any special software to encode these, export them with Audacity or use `ffmpeg`
+to convert to the `s8` codec. To get those into C arrays you still need other
+tools though:
+
+ - [raw2png](https://github.com/IanFinlayson/raw2gba) - Converts PCM to C arrays
+
+I recommend [this](https://ianfinlayson.net/class/cpsc305/notes/19-sound) 
+article for more information and examples on using sound.
 
 
