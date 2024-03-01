@@ -2,6 +2,12 @@
 
 # Tool Storage
 /bin
+/projects/*/build/*
+/projects/*/gfx/*.c
+/projects/*/gfx/*.raw
+/projects/*/gfx/*.pal
+/projects/*/*.bmp
+/projects/*/*.sav
 
 # C/C++ Standard
 
