@@ -8,6 +8,15 @@ your own software by simply printing the dot code strips and giving them to
 other's with the hardware. There is no need for any custom hardware to run
 new software.
 
+## Example Project
+
+![Example Sprite Demo](doc/example.png "Example Sprite Demo")
+
+If you want to jump straight into it, an [Example Project](https://github.com/AkBKukU/e-reader-dev/tree/main/projects#example-project)
+has been included. Be sure to set up the `bin/` directory [as needed](https://github.com/AkBKukU/e-reader-dev/blob/main/bin/README.MD)
+and setup the [GBA Development](https://github.com/AkBKukU/e-reader-dev?tab=readme-ov-file#gba-developement)
+enviornment first.
+
 ## Understanding The Development Tools
 
 The dev tools usable for the E-Reader can be split into three categories:
