@@ -3,7 +3,8 @@ PATH = /bin:$(DEVKITARM)/bin:../../bin:/opt/devkitpro/tools/bin
 PATH_LIB_GCC = $DEVKITARM/arm-none-eabi/lib/thumb
 
 # name of application
-NAME = "mario sprite"
+NAME = "sprite demo"
+TARGET = main
 
 # convert graphics
 GFX2GBA  = gfx2gba
@@ -18,63 +19,51 @@ OBJCOPY  = $(PREFIX)objcopy
 
 # e-reader tools
 NEVPK    = nevpk
-NESAV    = wine ../../bin/neflmake.exe
 NEDCMAKE = nedcmake
 NEDCENC  = nedcenc
 NEDCBMP  = raw2bmp
+#NESAV    = wine ../../bin/neflmake.exe # linux
+NESAV    = ../../bin/neflmake.exe # WSL
 
 all : sav bmp
 
-sav : main.sav
+sav : $(TARGET).sav
 
 # E-Reader Dot Code Strip
 
-bmp : main.vpk
-	$(NEDCMAKE) -i $< -o "main" -type 2 -bin -fill 1
-	$(NEDCENC) -i main.*.bin -o "main.raw"
-	$(NEDCBMP) -i "main.raw" -o "main"
+bmp : build/$(TARGET).vpk
+	$(NEDCMAKE) -i $< -o build/"$(TARGET)" -type 2 -bin -fill 1
+	$(NEDCENC) -i build/$(TARGET).*.bin -o build/"$(TARGET).raw"
+	$(NEDCBMP) -i build/"$(TARGET).raw" -o "$(TARGET)"
 
-main.sav : main.vpk
+$(TARGET).sav : build/$(TARGET).vpk
 	$(NESAV) -i $< -o "$@" -type 2 -name $(NAME)
 
 # E-Reader Save Data
 
-main.vpk : main.bin
+build/$(TARGET).vpk : build/$(TARGET).bin
 	$(NEVPK) -i "$<" -o "$@" -c -level 0
 
 # GBA Binary
 
-main.bin : main.elf
+build/$(TARGET).bin : build/$(TARGET).elf
 	$(OBJCOPY) -O binary "$<" "$@"
 
-main.elf : crt0.o main.o ../../lib/ereader.ld
-	$(LD) crt0.o main.o  -L $(PATH_LIB_GCC) -T ../../lib/ereader.ld -O3 -o "$@"
+build/$(TARGET).elf : build/crt0.o build/$(TARGET).o ../../lib/ereader.ld
+	$(LD) build/crt0.o build/$(TARGET).o  -L $(PATH_LIB_GCC) -T ../../lib/ereader.ld -O3 -o "$@"
 
-main.o : main.c gfx $(wildcard *.c)
+build/$(TARGET).o : $(TARGET).c gfx/gfx.c 
 	$(GCC) -I ../../lib -mthumb -c -O3 -o "$@" "$<"
 
-crt0.o : ../../lib/crt0.s
+build/crt0.o : ../../lib/crt0.s
 	$(AS) -o "$@" "$<"
 
 
 # Graphics
-gfx : mario.bmp.raw.c mario.bmp.pal.c
-
-mario.bmp.raw.c : mario.bmp.raw
-	$(B2X) -c -n mario_gfx -t u8 < "$<" > "$@"
-
-mario.bmp.pal.c : mario.bmp.pal
-	$(B2X) -c -n mario_pal -t u8 < "$<" > "$@"
-
-mario.bmp.raw : gfx/mario.bmp
-	$(GFX2GBA) -q -t8 -c16 -x -St.bmp.raw -D -P "$<"
-
-mario.bmp.pal : gfx/mario.bmp
-	$(GFX2GBA) -q -t8 -c16 -x -Sp.bmp.pal -D -G "$<"
+gfx/gfx.c :
+	gfx/convert.sh
 
 clean :
-	rm -f main.*.bin main.raw main.bmp
-	rm -f main.elf main.map main.bin main.vpk main.sav
-	rm -f main.o crt0.o
-	rm -f mario.bmp.*
-	rm -f *.gba
+	rm -f build/*
+	rm -f gfx/*.raw gfx/*.pal gfx/*.c
+	rm -f *.bmp *.sav

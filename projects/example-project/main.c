@@ -1,4 +1,5 @@
 //------------------------------------------------//
+// Sprite Demo with custom graphics, based on:    //
 // Nintendo e-Reader "Mario Sprite" Example (GBA) //
 // (c) 2004 Tim Schuerewegen                      //
 //------------------------------------------------//
@@ -10,8 +11,7 @@ extern int __end[];
 
 const u16 palette[] = { 0x0000, 0xFFFF };
 
-#include "mario.bmp.pal.c"
-#include "mario.bmp.raw.c"
+#include "gfx/gfx.c"
 ERAPI_SPRITE mario_sprite = { mario_gfx, mario_pal, 4, 4, 1, 1, 8, 8, 1};
 
 u32 mario_pos_x, mario_pos_y, mario_size;
@@ -40,7 +40,7 @@ int main()
   // region & text
   region = ERAPI_CreateRegion( 0, 0, 0x01, 0x01, 0x1C, 0x03);
   ERAPI_SetTextColor( region, 0x01, 0x00);
-  ERAPI_DrawText( region, 0x50, 0x08, "mario sprite");
+  ERAPI_DrawText( region, 0x50, 0x08, "sprite demo");
   // background
   ERAPI_LoadBackgroundSystem( 3, 2);
   ERAPI_SetBackgroundAutoScroll( 3, 0x40, 0x40);
