@@ -17,6 +17,14 @@ has been included. Be sure to set up the `bin/` directory [as needed](https://gi
 and setup the [GBA Development](https://github.com/AkBKukU/e-reader-dev?tab=readme-ov-file#gba-developement)
 enviornment first.
 
+## Running This Repo
+
+This repo has been setup primarily as a linux first development enviornment.
+However, I have been simultaneously been testing it with WSL Ubuntu and have
+had no issues (other than the flash save file tool needing `wine` on linux
+and being able to run natively on Windows.) It should be entirely possible to
+use this setup on either Windows or Linux as a result.
+
 ## Understanding The Development Tools
 
 The dev tools usable for the E-Reader can be split into three categories:
