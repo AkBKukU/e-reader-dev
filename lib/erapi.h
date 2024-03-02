@@ -40,25 +40,25 @@ typedef u16 ERAPI_HANDLE_SPRITE;
 typedef struct _ERAPI_SPRITE ERAPI_SPRITE;
 struct _ERAPI_SPRITE
 {
-  u8* data_gfx; // .... .... .... .... ....
-  u8* data_pal; // .... .... .... .... ....
-  u8 width;     // 0x08 0x06 0x06 0x02 0x04
-  u8 height;    // 0x08 0x06 0x02 0x02 0x04
-  u8 frames;    // 0x04 0x04 0x02 0x02 0x04
-  u8 unk1;      // 0x01 0x01 0x01 0x01 0x01
-  u8 unk2;      // 0x08 0x00 0x00 0x00 0x00
-  u8 unk3;      // 0x08 0x00 0x00 0x00 0x00
-  u8 unk4;      // 0x03 0x04 0x02 0x02 0x04
+  u8* data_gfx; // Tile data:		.... .... .... .... .... 
+  u8* data_pal; // Palette data:	.... .... .... .... ....
+  u8 width;     // Width in tiles:	0x08 0x06 0x06 0x02 0x04
+  u8 height;    // Height in tiles:	0x08 0x06 0x02 0x02 0x04
+  u8 frames;    // Frame count:		0x04 0x04 0x02 0x02 0x04
+  u8 unk1;      // Unknown: 		0x01 0x01 0x01 0x01 0x01
+  u8 unk2;      // Unknown width:	0x08 0x00 0x00 0x00 0x00
+  u8 unk3;      // Unknown height:	0x08 0x00 0x00 0x00 0x00
+  u8 unk4;      // Unknown frames:	0x03 0x04 0x02 0x02 0x04
 };
 
 typedef struct _ERAPI_BACKGROUND ERAPI_BACKGROUND;
 struct _ERAPI_BACKGROUND
 {
-  u8* data_gfx;
-  u8* data_pal;
-  u8* data_map;
-  u16 tiles;
-  u16 palettes;
+  u8* data_gfx; // Tile data
+  u8* data_pal; // Palette data
+  u8* data_map; // Map data
+  u16 tiles;    // Tile count
+  u16 palettes; // Palette count
 };
 
 //#define ERAPI_STUB
@@ -86,9 +86,19 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_FadeIn(a)                                   ERAPI_FUNC_X2( 0x200, a)
 #define ERAPI_FadeOut(a)                                  ERAPI_FUNC_X2( 0x201, a)
 #define ERAPI_LoadBackgroundSystem(a,b)                   ERAPI_FUNC_X3( 0x210, b, a)
+//            a: Background Layer
+//            b: Background Index
 #define ERAPI_SetBackgroundOffset(a,b,c)                  ERAPI_FUNC_X4( 0x211, a, b, c)
+//            a: Background Layer
+//            b: X Offset
+//            b: Y Offset
 #define ERAPI_SetBackgroundAutoScroll(a,b,c)              ERAPI_FUNC_X4( 0x212, a, b, c)
+//            a: Background Layer
+//            b: X Offset
+//            b: Y Offset
 #define ERAPI_SetBackgroundMirrorToggle(a,b)              ERAPI_FUNC_X3( 0x213, a, b)
+//            a: Background Layer
+//            b: Bitmask{0x01: Horizontal . 0x02: Vertical}  
 #define ERAPI_SetBackgroundMode(a)                        ERAPI_FUNC_X2( 0x219, a)
 #define ERAPI_LayerShow(a)                                ERAPI_FUNC_X2( 0x220, a)
 #define ERAPI_LayerHide(a)                                ERAPI_FUNC_X2( 0x221, a)
@@ -97,26 +107,37 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_SpriteFree(a)                               ERAPI_FUNC_X2( 0x231, a)
 #define ERAPI_SetSpritePos(a,b,c)                         ERAPI_FUNC_X4( 0x232, a, b, c)
 #define ERAPI_SpriteFrameNext(a)                          ERAPI_FUNC_X2( 0x234, a)
+//            a: Sprite Handle
 #define ERAPI_SpriteFramePrev(a)                          ERAPI_FUNC_X2( 0x235, a)
+//            a: Sprite Handle
 #define ERAPI_SetSpriteFrame(a,b)                         ERAPI_FUNC_X3( 0x236, a, b)
+//            a: Sprite Handle
+//            b: Sprite Frame Index
 #define ERAPI_SetSpriteAutoMove(a,b,c)                    ERAPI_FUNC_X4( 0x239, a, b, c)
 #define ERAPI_SpriteAutoAnimate(a,b,c)                    ERAPI_FUNC_X4( 0x23C, a, b, c)
+//            a: Sprite Handle
+//            b: Animation speed in frames
+//            c: 0 = Start Animating Forever
+//               1 = Stop Animation
+//               2 > Number of frames to animate for -2 (ex. 12 animates for 10 frames)
 #define ERAPI_SpriteAutoRotateUntilAngle(a,b,c)           ERAPI_FUNC_X4( 0x23E, a, b, c)
 #define ERAPI_SpriteAutoRotateByAngle(a,b,c)              ERAPI_FUNC_X4( 0x23F, a, b, c)
 #define ERAPI_SpriteAutoRotateByTime(a,b,c)               ERAPI_FUNC_X4( 0x240, a, b, c)
 #define ERAPI_SetSpriteAutoMoveHorizontal(a,b)            ERAPI_FUNC_X3( 0x242, a, b)
 #define ERAPI_SetSpriteAutoMoveVertical(a,b)              ERAPI_FUNC_X3( 0x243, a, b)
 #define ERAPI_SpriteDrawOnBackground(a,b,c)   	          ERAPI_FUNC_X4( 0x245, a, b, c)
-#define ERAPI_SpriteShow(a)											          ERAPI_FUNC_X2( 0x246, a)
-#define ERAPI_SpriteHide(a)											          ERAPI_FUNC_X2( 0x247, a)
+#define ERAPI_SpriteShow(a)			          ERAPI_FUNC_X2( 0x246, a)
+#define ERAPI_SpriteHide(a)			          ERAPI_FUNC_X2( 0x247, a)
 #define ERAPI_SpriteMirrorToggle(a,b)          	          ERAPI_FUNC_X3( 0x248, a, b)
+//            a: Sprite Handle
+//            b: Bitmask{0x01: Horizontal . 0x02: Vertical}  
 #define ERAPI_GetSpritePos(a,b,c)                         ERAPI_FUNC_X4( 0x24C, a, (u32)b, (u32)c)
 #define ERAPI_SpriteCreateCustom(a,b)                     ERAPI_FUNC_X3( 0x24D, a, (u32)b)
 #define ERAPI_SpriteMove(a,b,c)                           ERAPI_FUNC_X4( 0x257, a, b, c)
 #define ERAPI_SpriteAutoScaleUntilSize(a,b,c)             ERAPI_FUNC_X4( 0x25B, a, b, c)
 #define ERAPI_SpriteAutoScaleBySize(a,b,c)     	          ERAPI_FUNC_X4( 0x25C, a, b, c)
-#define ERAPI_HANDLE_SpriteAutoScaleWidthUntilSize(a,b,c)	ERAPI_FUNC_X4( 0x25D, a, b, c)
-#define ERAPI_SpriteAutoScaleHeightBySize(a,b,c)        	ERAPI_FUNC_X4( 0x25E, a, b, c)
+#define ERAPI_HANDLE_SpriteAutoScaleWidthUntilSize(a,b,c) ERAPI_FUNC_X4( 0x25D, a, b, c)
+#define ERAPI_SpriteAutoScaleHeightBySize(a,b,c)	  ERAPI_FUNC_X4( 0x25E, a, b, c)
 #define ERAPI_SetSpriteVisible(a,b)                       ERAPI_FUNC_X3( 0x266, a, b)
 #define ERAPI_SetBackgroundPalette(a,b,c)                 ERAPI_FUNC_X4( 0x27E, (u32)a, b, c)
 #define ERAPI_GetBackgroundPalette(a,b,c)                 ERAPI_FUNC_X4( 0x27F, (u32)a, b, c)
@@ -127,7 +148,7 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_SetRegionColor(a,b)                         ERAPI_FUNC_X3( 0x291, a, b)
 #define ERAPI_ClearRegion(a)                              ERAPI_FUNC_X2( 0x292, a)
 #define ERAPI_SetPixel(a,b,c)                             ERAPI_FUNC_X3( 0x293, a, (b << 8) | c)
-#define ERAPI_GetPixel(a,b,c)                            	ERAPI_FUNC_X3( 0x294, a, (b << 8) | c)
+#define ERAPI_GetPixel(a,b,c)                             ERAPI_FUNC_X3( 0x294, a, (b << 8) | c)
 #define ERAPI_DrawLine(a,b,c,d,e)                         ERAPI_FUNC_X4( 0x295, a, (b << 8) | c, (d << 8) | e)
 #define ERAPI_DrawRect(a,b,c,d,e,f)                       ERAPI_FUNC_X4( 0x296, (a << 8) | f, (b << 8) | c, (d << 8) | e)
 #define ERAPI_SetTextColor(a,b,c)                         ERAPI_FUNC_X3( 0x298, a, (b << 8) | c)
@@ -140,7 +161,7 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_02C2(a)                                     ERAPI_FUNC_X2( 0x2C2, (u32)a)
 #define ERAPI_02C3(a)                                     ERAPI_FUNC_X2( 0x2C3, a)
 #define ERAPI_02DD(a,b)                                   ERAPI_FUNC_X3( 0x2DD, a, b)
-#define ERAPI_FlashWriteSectorSingle(a,b)	                ERAPI_FUNC_X3( 0x2DE, a, (u32)b)
+#define ERAPI_FlashWriteSectorSingle(a,b)	          ERAPI_FUNC_X3( 0x2DE, a, (u32)b)
 #define ERAPI_FlashReadSectorSingle(a,b)                  ERAPI_FUNC_X3( 0x2DF, a, (u32)b)
 #define ERAPI_SoftReset()                                 ERAPI_FUNC_X1( 0x2E0)
 #define ERAPI_InitMemory(a)                               ERAPI_FUNC_X2( 0x2EA, a)
