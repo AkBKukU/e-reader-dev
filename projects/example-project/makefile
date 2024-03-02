@@ -64,6 +64,10 @@ gfx/gfx.c :
 	gfx/convert.sh
 
 clean :
-	rm -f build/*
+	rm -f build/*.o
+	rm -f build/*.bin
+	rm -f build/*.elf
+	rm -f build/*.raw
+	rm -f build/*.vpk
 	rm -f gfx/*.gfx gfx/*.pal gfx/*.c
 	rm -f *.bmp *.sav
