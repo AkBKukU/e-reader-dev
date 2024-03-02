@@ -3,8 +3,9 @@
 # Tool Storage
 /bin
 /projects/*/build/*
+/projects/*/build/README.MD
 /projects/*/gfx/*.c
-/projects/*/gfx/*.raw
+/projects/*/gfx/*.gfx
 /projects/*/gfx/*.pal
 /projects/*/*.bmp
 /projects/*/*.sav

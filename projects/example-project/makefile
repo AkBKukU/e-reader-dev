@@ -65,5 +65,5 @@ gfx/gfx.c :
 
 clean :
 	rm -f build/*
-	rm -f gfx/*.raw gfx/*.pal gfx/*.c
+	rm -f gfx/*.gfx gfx/*.pal gfx/*.c
 	rm -f *.bmp *.sav
