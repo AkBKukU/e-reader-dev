@@ -6,6 +6,7 @@ extern int __end[];
 const u16 palette[] = { 0x0000, 0xFFFF };
 
 #include "gfx/gfx.c"
+u8 back=0;
 
 // Sprite for arrows
 ERAPI_SPRITE arrow_sprite = { 
@@ -75,7 +76,15 @@ char* citoa(int num, char* str, int base)
  
 	return str;
 }
-
+void background_sweep(s8 dir)
+{
+	back+=dir;
+	if (back>200) back = 0;
+	if (back==28) back += dir;
+	if (back==42) back += dir;
+	//if (back==46) back += dir;
+	ERAPI_LoadBackgroundSystem( 3, back);
+}
 
 int main()
 {
@@ -94,7 +103,6 @@ int main()
 	ERAPI_DrawText( region, 0x40, 0x08, "System Backgrounds");
 
 	// background
-	u8 back=0;
 	u16 back_pos_x=0;
 	u16 back_pos_y=0;
 	char back_prt[5]="test";
@@ -111,7 +119,7 @@ int main()
 	// loop
 	quit = 0;
 	u8 timer = 0;
-	u8 debounce = 30;
+	u8 debounce = 10;
 	while (quit == 0)
 	{
 		// read keys
@@ -124,11 +132,8 @@ int main()
 			if (key & ERAPI_KEY_L)
 			{
 				ERAPI_SetSpriteFrame( handle_arrow_l,1);
-				ERAPI_SpriteAutoAnimate(handle_arrow_l,10,12);
-				back-=10;
-				if (back>200) back = 0;
-				ERAPI_LoadBackgroundSystem( 3, 0);
-				ERAPI_LoadBackgroundSystem( 3, back);
+				ERAPI_SpriteAutoAnimate(handle_arrow_l,debounce,debounce+ 2);
+				background_sweep(-1);
 				citoa(back,back_prt,10);
 				ERAPI_DrawText( region, 0x50, 0x0f, back_prt);
 
@@ -137,11 +142,8 @@ int main()
 			if (key & ERAPI_KEY_R)
 			{
 				ERAPI_SetSpriteFrame( handle_arrow_r,1);
-				ERAPI_SpriteAutoAnimate(handle_arrow_r,10,12);
-				back+=10;
-				if (back>120) back = 120;
-				ERAPI_LoadBackgroundSystem( 3, 0);
-				ERAPI_LoadBackgroundSystem( 3, back);
+				ERAPI_SpriteAutoAnimate(handle_arrow_r,debounce,debounce+ 2);
+				background_sweep(1);
 				citoa(back,back_prt,10);
 				ERAPI_DrawText( region, 0x50, 0x0f, back_prt);
 				timer=debounce;
