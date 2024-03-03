@@ -151,6 +151,7 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_GetSpritePalette(a,b,c)                     ERAPI_FUNC_X4( 0x281, (u32)a, b, c)
 #define ERAPI_ClearPalette()                              ERAPI_FUNC_X1( 0x282)
 #define ERAPI_CreateRegion(a,b,c,d,e,f)                   ERAPI_FUNC_X4( 0x290, (a << 8) | b, (c << 8) | d, (e << 8) | f)
+//            a: 0,2=normal, 1,4,5,6,10=nothing, 3=messes with background tile memory
 //            c: x position in tiles
 //            d: y position in tiles
 //            e: width in tiles
