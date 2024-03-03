@@ -84,7 +84,9 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_PlaySoundCustom(a,b)                        ERAPI_FUNC_X3( 0x12F, (u32)a, b)
 #define ERAPI_PlaySoundCustomEx(a,b,c)                    ERAPI_FUNC_X4( 0x131, (u32)a, b, c)
 #define ERAPI_FadeIn(a)                                   ERAPI_FUNC_X2( 0x200, a)
+//            a: Frame count for animation
 #define ERAPI_FadeOut(a)                                  ERAPI_FUNC_X2( 0x201, a)
+//            a: Frame count for animation
 #define ERAPI_LoadBackgroundSystem(a,b)                   ERAPI_FUNC_X3( 0x210, b, a)
 //            a: Background Layer
 //            b: Background Index
@@ -147,6 +149,7 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_CreateRegion(a,b,c,d,e,f)                   ERAPI_FUNC_X4( 0x290, (a << 8) | b, (c << 8) | d, (e << 8) | f)
 #define ERAPI_SetRegionColor(a,b)                         ERAPI_FUNC_X3( 0x291, a, b)
 #define ERAPI_ClearRegion(a)                              ERAPI_FUNC_X2( 0x292, a)
+//            a: Region
 #define ERAPI_SetPixel(a,b,c)                             ERAPI_FUNC_X3( 0x293, a, (b << 8) | c)
 #define ERAPI_GetPixel(a,b,c)                             ERAPI_FUNC_X3( 0x294, a, (b << 8) | c)
 #define ERAPI_DrawLine(a,b,c,d,e)                         ERAPI_FUNC_X4( 0x295, a, (b << 8) | c, (d << 8) | e)
@@ -169,6 +172,7 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_FlashReadPart(a,b,c)                        ERAPI_FUNC_X4( 0x2EE, a, (u32)b, c)
 #define ERAPI_RandInit(a)                                 ERAPI_FUNC_X2( 0x2F1, a)
 #define ERAPI_RenderFrame(a)                              ERAPI_FUNC_X2( 0x300, a)
+//            a: Number of frames to render before returning
 #define ERAPI_GetKeyStateSticky()                         ERAPI_FUNC_X1( 0x301)
 #define ERAPI_GetKeyStateRaw()                            ERAPI_FUNC_X1( 0x302)
 #endif
