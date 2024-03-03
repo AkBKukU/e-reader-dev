@@ -6,6 +6,7 @@ extern int __end[];
 const u16 palette[] = { 0x0000, 0xFFFF };
 
 #include "gfx/gfx.c"
+u8 fade = 50;
 u8 back=0;
 
 // Sprite for arrows
@@ -21,7 +22,7 @@ ERAPI_SPRITE arrow_sprite = {
 	1  // ? frames
 };
 
-ERAPI_HANDLE_SPRITE handle_arrow_r, handle_arrow_l;
+ERAPI_HANDLE_SPRITE handle_arrow_r, handle_arrow_l, handle_arrow_menu;
 // A utility function to reverse a string
 void reverse(char str[], int length)
 {
@@ -76,31 +77,46 @@ char* citoa(int num, char* str, int base)
  
 	return str;
 }
+
+u8 bad_back_count=21;
+u8 bad_back[] = {28,42,46,47,48,55,62,63,64,71,72,73,79,80,82,83,84,86,87,88,89};
 void background_sweep(s8 dir)
 {
 	back+=dir;
-	if (back>200) back = 0;
-	if (back==28) back += dir;
-	if (back==42) back += dir;
-	//if (back==46) back += dir;
+	if (back>101 && dir == -1) back = 101;
+	if (back>101) back = 0;
+	u8 check = 1;
+	while(check)
+	{
+		check=0;
+		for (u8 i=0;i<bad_back_count;++i)
+		{
+			if (back == bad_back[i])
+			{
+				back += dir;
+				check=1;
+			}
+		}
+	}
+
 	ERAPI_LoadBackgroundSystem( 3, back);
 }
 
-int main()
+void background()
 {
-	ERAPI_HANDLE_REGION region;
 	u32 key, quit;
 	// init
-	ERAPI_FadeIn( 1);
+	ERAPI_FadeIn( fade);
+	ERAPI_RenderFrame( fade);
 	ERAPI_InitMemory( (ERAPI_RAM_END - (u32)__end) >> 10);
 	ERAPI_SetBackgroundMode( 0);
 	// palette
 	ERAPI_SetBackgroundPalette( &palette[0], 0x00, 0x02);
 
 	// region & text
+	ERAPI_HANDLE_REGION region;
 	region = ERAPI_CreateRegion( 0, 0, 0x01, 0x01, 0x1C, 0x03);
 	ERAPI_SetTextColor( region, 0x01, 0x00);
-	ERAPI_DrawText( region, 0x40, 0x08, "System Backgrounds");
 
 	// background
 	u16 back_pos_x=0;
@@ -114,12 +130,13 @@ int main()
 
 	handle_arrow_l = ERAPI_SpriteCreateCustom( 0, &arrow_sprite);
 	ERAPI_SetSpritePos( handle_arrow_l, 20, 20);
-	ERAPI_SpriteMirrorToggle( handle_arrow_l,0x01); 
+	ERAPI_SpriteMirrorToggle( handle_arrow_l,0x01);
 
 	// loop
 	quit = 0;
 	u8 timer = 0;
 	u8 debounce = 10;
+	u8 show = 1;
 	while (quit == 0)
 	{
 		// read keys
@@ -129,13 +146,17 @@ int main()
 		{
 			timer--;
 		}else{
+			if (key & ERAPI_KEY_A)
+			{
+				show = !show;
+				timer=debounce;
+			}
+
 			if (key & ERAPI_KEY_L)
 			{
 				ERAPI_SetSpriteFrame( handle_arrow_l,1);
 				ERAPI_SpriteAutoAnimate(handle_arrow_l,debounce,debounce+ 2);
 				background_sweep(-1);
-				citoa(back,back_prt,10);
-				ERAPI_DrawText( region, 0x50, 0x0f, back_prt);
 
 				timer=debounce;
 			}
@@ -144,10 +165,19 @@ int main()
 				ERAPI_SetSpriteFrame( handle_arrow_r,1);
 				ERAPI_SpriteAutoAnimate(handle_arrow_r,debounce,debounce+ 2);
 				background_sweep(1);
-				citoa(back,back_prt,10);
-				ERAPI_DrawText( region, 0x50, 0x0f, back_prt);
+
 				timer=debounce;
 			}
+
+			ERAPI_ClearRegion(region);
+			if (show)
+			{
+				ERAPI_DrawText( region, 0x40, 0x06, "System Backgrounds");
+				citoa(back,back_prt,10);
+				ERAPI_DrawText( region, 0x65, 0x0f, back_prt);
+			}
+			ERAPI_SetSpriteVisible(handle_arrow_l,show);
+			ERAPI_SetSpriteVisible(handle_arrow_r,show);
 
 			if (key & ERAPI_KEY_LEFT) back_pos_x--;
 			if (key & ERAPI_KEY_RIGHT) back_pos_x++;
@@ -161,7 +191,86 @@ int main()
 		ERAPI_RenderFrame( 1);
 	}
 	// free sprite
+	ERAPI_ClearRegion(region);
+	ERAPI_SetSpriteVisible(handle_arrow_l,0);
+	ERAPI_SetSpriteVisible(handle_arrow_r,0);
+	ERAPI_RenderFrame( 1);
+	ERAPI_SpriteFree( handle_arrow_l);
 	ERAPI_SpriteFree( handle_arrow_r);
+
+	ERAPI_FadeOut(fade);
+	ERAPI_RenderFrame( fade);
+	ERAPI_LayerHide(3);
+	return;
+}
+
+int main()
+{
+	ERAPI_FadeIn( fade);
+	ERAPI_RenderFrame( fade);
+	// region & text
+	ERAPI_HANDLE_REGION region;
+	region = ERAPI_CreateRegion( 0, 0, 0x01, 0x01, 0x1C, 0x03);
+	ERAPI_SetTextColor( region, 0x01, 0x00);
+
+	// background
+	u16 back_pos_x=0;
+	u16 back_pos_y=0;
+	char back_prt[5]="test";
+	ERAPI_LoadBackgroundSystem( 1, 24);
+	ERAPI_SetBackgroundAutoScroll(1,0,0x40);
+
+	// create sprite
+	handle_arrow_menu = ERAPI_SpriteCreateCustom( 0, &arrow_sprite);
+	ERAPI_SetSpritePos( handle_arrow_menu, 20, 80);
+
+	// loop
+	u32 key, quit;
+	quit = 0;
+	u8 timer = 0;
+	u8 debounce = 10;
+	u8 menu = 1;
+	while (quit == 0)
+	{
+		key = ERAPI_GetKeyStateRaw();
+		// zoom
+		if (timer)
+		{
+			timer--;
+		}else{
+			if (key & ERAPI_KEY_A)
+			{
+				ERAPI_FadeOut(fade);
+				ERAPI_RenderFrame( fade);
+				ERAPI_LayerHide(1);
+				ERAPI_SetSpriteVisible(handle_arrow_menu,0);
+				background();
+				ERAPI_LoadBackgroundSystem( 1, 24);
+				ERAPI_SetBackgroundAutoScroll(1,0,0x40);
+				ERAPI_LayerShow(1);
+				ERAPI_SetSpriteVisible(handle_arrow_menu,1);
+				ERAPI_FadeIn( fade);
+				ERAPI_RenderFrame( fade);
+			}
+
+			if (key & ERAPI_KEY_UP)
+			{
+				menu--;
+				if (menu<1) menu=1;
+				timer=debounce;
+			}
+			if (key & ERAPI_KEY_DOWN)
+			{
+				menu++;
+				if (menu>2) menu=2;
+				timer=debounce;
+			}
+			// quit
+			if (key & ERAPI_KEY_B) quit = 1;
+		}
+		ERAPI_RenderFrame( 1);
+	}
+
 	// exit
 	return ERAPI_EXIT_TO_MENU;
 }

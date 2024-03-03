@@ -3,7 +3,7 @@ PATH = /bin:$(DEVKITARM)/bin:../../bin:/opt/devkitpro/tools/bin
 PATH_LIB_GCC = $DEVKITARM/arm-none-eabi/lib/thumb
 
 # name of application
-NAME = "sprite demo"
+NAME = "Background Checker"
 TARGET = main
 
 # convert graphics
@@ -22,8 +22,8 @@ NEVPK    = nevpk
 NEDCMAKE = nedcmake
 NEDCENC  = nedcenc
 NEDCBMP  = raw2bmp
-#NESAV    = wine ../../bin/neflmake.exe # linux
-NESAV    = ../../bin/neflmake.exe # WSL
+NESAV    = wine ../../bin/neflmake.exe # linux
+#NESAV    = ../../bin/neflmake.exe # WSL
 
 all : sav bmp
 
