@@ -103,7 +103,9 @@ struct _ERAPI_BACKGROUND
 //            b: Bitmask{0x01: Horizontal . 0x02: Vertical}  
 #define ERAPI_SetBackgroundMode(a)                        ERAPI_FUNC_X2( 0x219, a)
 #define ERAPI_LayerShow(a)                                ERAPI_FUNC_X2( 0x220, a)
+//            a: Background Layer
 #define ERAPI_LayerHide(a)                                ERAPI_FUNC_X2( 0x221, a)
+//            a: Background Layer
 #define ERAPI_LoadBackgroundCustom(a,b)                   ERAPI_FUNC_X3( 0x22D, a, (u32)b)
 #define ERAPI_SpriteCreateSystem(a,b)                     ERAPI_FUNC_X3( 0x230, a, b)
 #define ERAPI_SpriteFree(a)                               ERAPI_FUNC_X2( 0x231, a)
