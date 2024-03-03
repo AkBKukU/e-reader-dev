@@ -131,7 +131,9 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_SetSpriteAutoMoveVertical(a,b)              ERAPI_FUNC_X3( 0x243, a, b)
 #define ERAPI_SpriteDrawOnBackground(a,b,c)   	          ERAPI_FUNC_X4( 0x245, a, b, c)
 #define ERAPI_SpriteShow(a)			          ERAPI_FUNC_X2( 0x246, a)
+//            a: Sprite Handle
 #define ERAPI_SpriteHide(a)			          ERAPI_FUNC_X2( 0x247, a)
+//            a: Sprite Handle
 #define ERAPI_SpriteMirrorToggle(a,b)          	          ERAPI_FUNC_X3( 0x248, a, b)
 //            a: Sprite Handle
 //            b: Bitmask{0x01: Horizontal . 0x02: Vertical}  
@@ -149,6 +151,10 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_GetSpritePalette(a,b,c)                     ERAPI_FUNC_X4( 0x281, (u32)a, b, c)
 #define ERAPI_ClearPalette()                              ERAPI_FUNC_X1( 0x282)
 #define ERAPI_CreateRegion(a,b,c,d,e,f)                   ERAPI_FUNC_X4( 0x290, (a << 8) | b, (c << 8) | d, (e << 8) | f)
+//            c: x position in tiles
+//            d: y position in tiles
+//            e: width in tiles
+//            f: height in tiles
 #define ERAPI_SetRegionColor(a,b)                         ERAPI_FUNC_X3( 0x291, a, b)
 #define ERAPI_ClearRegion(a)                              ERAPI_FUNC_X2( 0x292, a)
 //            a: Region
