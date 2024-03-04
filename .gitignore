@@ -9,6 +9,7 @@
 /projects/*/gfx/*.pal
 /projects/*/*.bmp
 /projects/*/*.sav
+/projects/*/*.log
 
 # C/C++ Standard
 
