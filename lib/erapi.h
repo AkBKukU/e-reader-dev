@@ -152,11 +152,14 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_ClearPalette()                              ERAPI_FUNC_X1( 0x282)
 #define ERAPI_CreateRegion(a,b,c,d,e,f)                   ERAPI_FUNC_X4( 0x290, (a << 8) | b, (c << 8) | d, (e << 8) | f)
 //            a: 0,2=normal, 1,4,5,6,10=nothing, 3=messes with background tile memory
+//            b: 0= no change, 4 = text grey if color is set, * text is black
 //            c: x position in tiles
 //            d: y position in tiles
 //            e: width in tiles
 //            f: height in tiles
 #define ERAPI_SetRegionColor(a,b)                         ERAPI_FUNC_X3( 0x291, a, b)
+//            a: Region
+//            b: Color code
 #define ERAPI_ClearRegion(a)                              ERAPI_FUNC_X2( 0x292, a)
 //            a: Region
 #define ERAPI_SetPixel(a,b,c)                             ERAPI_FUNC_X3( 0x293, a, (b << 8) | c)
@@ -165,10 +168,17 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_DrawRect(a,b,c,d,e,f)                       ERAPI_FUNC_X4( 0x296, (a << 8) | f, (b << 8) | c, (d << 8) | e)
 #define ERAPI_SetTextColor(a,b,c)                         ERAPI_FUNC_X3( 0x298, a, (b << 8) | c)
 #define ERAPI_DrawText(a,b,c,d)                           ERAPI_FUNC_X4( 0x299, a, (b << 8) | c, (u32)d)
+//            a: Region
+//            b: x position in pixels in region
+//            c: y position in pixels in region
+//            d: Text
 #define ERAPI_SetTextSize(a,b)                            ERAPI_FUNC_X2( 0x29A, (a << 8) | b)
 #define ERAPI_SetBackgroundModeRaw(a)                     ERAPI_FUNC_X2( 0x29F, (u32)a)
 #define ERAPI_02B5(a,b)                                   ERAPI_FUNC_X3( 0x2B5, a, b)
 #define ERAPI_GetTextWidth(a,b)                           ERAPI_FUNC_X3( 0x2C0, a, (u32)b)
+//            a: Region
+//            b: Text
+//            Return: Pixel count
 #define ERAPI_GetTextWidthEx(a,b,c)                       ERAPI_FUNC_X3( 0x2C1, (a << 8) | c, (u32)b)
 #define ERAPI_02C2(a)                                     ERAPI_FUNC_X2( 0x2C2, (u32)a)
 #define ERAPI_02C3(a)                                     ERAPI_FUNC_X2( 0x2C3, a)
