@@ -210,7 +210,7 @@ void mode_run_sound(ERAPI_HANDLE_REGION chooser)
 	ERAPI_SetBackgroundOffset(1,0,-55);
 	ERAPI_SetBackgroundAutoScroll(1,80,0);
 
-	hud_chooser(chooser,MODE_BACKGROUND,0, back, 1);
+	hud_chooser(chooser,MODE_SOUND,0, back, 1);
 
 
 	ERAPI_FadeIn( fade);
