@@ -104,15 +104,13 @@ void background_sweep(s8 dir)
 }
 
 
-void background()
+void background(ERAPI_HANDLE_REGION chooser)
 {
 	u32 key, quit;
 	// init
 	ERAPI_LoadBackgroundSystem( 3, back);
 	ERAPI_LayerShow(3);
-	// region & text
-	//ERAPI_HANDLE_REGION chooser = ERAPI_CreateRegion( 0, 0, 0x01, 0x01, 0x1C, 0x03);
-	//ERAPI_SetTextColor( chooser, 0x01, 0x00);
+	ERAPI_SetTextColor( chooser, 0x01, 0x00);
 
 
 	// background
@@ -127,6 +125,10 @@ void background()
 	handle_arrow_l = ERAPI_SpriteCreateCustom( 0, &arrow_sprite);
 	ERAPI_SetSpritePos( handle_arrow_l, 20, 20);
 	ERAPI_SpriteMirrorToggle( handle_arrow_l,0x01);
+
+	ERAPI_DrawText( chooser, 0x40, 0x06, "System Backgrounds");
+	citoa(back,back_prt,10);
+	ERAPI_DrawText( chooser, 0x65, 0x0f, back_prt);
 
 	ERAPI_FadeIn( fade);
 	ERAPI_RenderFrame( fade);
@@ -168,12 +170,12 @@ void background()
 				timer=debounce;
 			}
 
-			//ERAPI_ClearRegion(chooser);
+			ERAPI_ClearRegion(chooser);
 			if (show)
 			{
-				//ERAPI_DrawText( chooser, 0x40, 0x06, "System Backgrounds");
+				ERAPI_DrawText( chooser, 0x40, 0x06, "System Backgrounds");
 				citoa(back,back_prt,10);
-				//ERAPI_DrawText( chooser, 0x65, 0x0f, back_prt);
+				ERAPI_DrawText( chooser, 0x65, 0x0f, back_prt);
 			}
 			ERAPI_SetSpriteVisible(handle_arrow_l,show);
 			ERAPI_SetSpriteVisible(handle_arrow_r,show);
@@ -190,14 +192,13 @@ void background()
 		ERAPI_RenderFrame( 1);
 	}
 	// free sprite
-	//ERAPI_ClearRegion(chooser);
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
 	ERAPI_SetSpriteVisible(handle_arrow_l,0);
 	ERAPI_SetSpriteVisible(handle_arrow_r,0);
-	ERAPI_RenderFrame( 1);
 	ERAPI_SpriteFree( handle_arrow_l);
 	ERAPI_SpriteFree( handle_arrow_r);
+	ERAPI_ClearRegion(chooser);
 
 	ERAPI_LayerHide(3);
 
@@ -205,13 +206,17 @@ void background()
 	return;
 }
 
-void menu ()
+void menu (ERAPI_HANDLE_REGION region_menu)
 {
 	ERAPI_FadeIn( fade);
-	// region & text
-	// ERAPI_HANDLE_REGION region;
-	// region = ERAPI_CreateRegion( 0, 0, 0x01, 0x01, 0x1C, 0x03);
-	// ERAPI_SetTextColor( region, 0x01, 0x00);
+
+	//ERAPI_SetRegionColor(region_menu, 0x02);
+	ERAPI_ClearRegion(region_menu);
+	ERAPI_SetTextColor( region_menu, 0x2, 0);
+	ERAPI_DrawText( region_menu, 0, 0, "System Assets");
+
+	ERAPI_DrawText( region_menu, 0, 10+12, "Backgrounds");
+	ERAPI_DrawText( region_menu, 0, 24+12, "Sounds");
 
 	// background
 	u16 back_pos_x=0;
@@ -224,7 +229,7 @@ void menu ()
 
 	// create sprite
 	handle_arrow_menu = ERAPI_SpriteCreateCustom( 0, &arrow_sprite);
-	ERAPI_SetSpritePos( handle_arrow_menu, 20, 80);
+	ERAPI_SetSpritePos( handle_arrow_menu, 60, 60+14);
 
 	ERAPI_RenderFrame( fade);
 
@@ -244,7 +249,9 @@ void menu ()
 		}else{
 			if (key & ERAPI_KEY_A)
 			{
-				mode = 1;
+				ERAPI_SetSpriteFrame( handle_arrow_menu,1);
+				ERAPI_SpriteAutoAnimate(handle_arrow_menu,debounce,debounce+ 2);
+				mode = menu;
 				quit = 1;
 			}
 
@@ -267,12 +274,14 @@ void menu ()
 				sysexit= 1;
 			}
 		}
+		ERAPI_SetSpritePos( handle_arrow_menu, 60, 60+(menu * 14));
 		ERAPI_RenderFrame( 1);
 	}
 
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
 	ERAPI_LayerHide(1);
+	ERAPI_ClearRegion(region_menu);
 	ERAPI_SetSpriteVisible(handle_arrow_menu,0);
 	// exit
 	ERAPI_SpriteFree( handle_arrow_menu);
@@ -284,6 +293,18 @@ int main()
 {
 	ERAPI_InitMemory( (ERAPI_RAM_END - (u32)__end) >> 10);
 	ERAPI_SetBackgroundMode( 0);
+
+	// region & text
+	ERAPI_HANDLE_REGION region_menu = ERAPI_CreateRegion( 0, 0, 0xa, 0x06, 0x0A, 0x06);
+
+	// region & text
+	ERAPI_HANDLE_REGION chooser = ERAPI_CreateRegion(
+	    0,
+	    0, // 0= no change, 4 = text grey if color is set, * text is black
+	    0x01, 0x01,
+	    0x1C, 0x03
+	);
+
 	// palette
 	ERAPI_SetBackgroundPalette( &palette[0], 0x00, 0x02);
 
@@ -291,8 +312,9 @@ int main()
 	{
 		switch(mode)
 		{
-			case 0: menu (); break;
-			case 1: background (); break;
+			case 0: menu (region_menu); break;
+			case 1: background (chooser); break;
+			case 2: menu (region_menu); break;
 		}
 	}
 
