@@ -67,6 +67,7 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_Div(a,b)                                    ERAPI_FUNC_X3( 0x103, a, b)
 #define ERAPI_Mod(a,b)                                    ERAPI_FUNC_X3( 0x104, a, b)
 #define ERAPI_PlaySoundSystem(a)                          ERAPI_FUNC_X2( 0x105, a)
+//            a: Sound Index
 #define ERAPI_0106(a,b)                                   ERAPI_FUNC_X3( 0x106, a, b)
 #define ERAPI_Rand()                                      ERAPI_FUNC_X1( 0x107)
 #define ERAPI_SetSoundVolume(a,b)                         ERAPI_FUNC_X3( 0x108, a, b)
@@ -77,7 +78,9 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_RandMax(a)                                  ERAPI_FUNC_X2( 0x112, a)
 #define ERAPI_SetSoundSpeed(a,b)                          ERAPI_FUNC_X3( 0x113, a, b)
 #define ERAPI_SoundPause(a)                               ERAPI_FUNC_X2( 0x116, a)
+//            a: Sound Index
 #define ERAPI_SoundResume(a)                              ERAPI_FUNC_X2( 0x117, a)
+//            a: Sound Index
 #define ERAPI_PlaySoundSystemEx(a,b)                      ERAPI_FUNC_X3( 0x118, a, b)
 #define ERAPI_IsSoundPlaying(a,b)                         ERAPI_FUNC_X3( 0x119, a, b)
 #define ERAPI_GetExitCount()                              ERAPI_FUNC_X1( 0x11D)
