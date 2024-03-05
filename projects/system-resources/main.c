@@ -124,19 +124,17 @@ void sound_sweep(s8 dir)
 //u8 bad_sprite_count=10;
 u8 bad_sprite[] = {28,30,31,32,33,34,35,36,48,49,51,52,61,62,63,67,70,71,75,79,91,92,94,95,
 	101,103,104,105,108,109,112,122,127,128,129,134,135,147,148,149,163,167,168,172,173,179,189,190,
-	192,197,198,205,206,207,208,211,212,213,215,216,236,237,238,239,240,
-
-	245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266
+	192,197,198,205,206,207,208,211,212,213,215,216,236,237,238,239,240
 };
+int bad_sprite_count = sizeof(bad_sprite);
 void sprite_sweep(s8 dir)
 {
 	sprite+=dir;
-	u16 sprite_max=245;
-	if (sprite>sprite_max && dir == -1) sprite = sprite_max;
+	u16 sprite_max=21;
+	if (sprite < 2) sprite = sprite_max;
 	if (sprite>sprite_max) sprite = 1;
 	u8 check = 1;
 
-	int bad_sprite_count = sizeof(bad_sprite);
 	while(check)
 	{
 		check=0;
@@ -149,7 +147,6 @@ void sprite_sweep(s8 dir)
 			}
 		}
 	}
-
 }
 void init()
 {
@@ -262,6 +259,7 @@ void mode_run_sprite(ERAPI_HANDLE_REGION chooser)
 				ERAPI_SpriteFree(sprite_in);
 				sprite_sweep(dir);
 				hud_chooser(chooser,MODE_SPRITE,key, show);
+		ERAPI_RenderFrame( 1);
 				sprite_in = ERAPI_SpriteCreateSystem( 1, sprite);
 				ERAPI_SetSpritePos( sprite_in, 120, 80);
 				timer=debounce;
@@ -284,6 +282,7 @@ void mode_run_sprite(ERAPI_HANDLE_REGION chooser)
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
 	hud_chooser(chooser,MODE_BACKGROUND,0, 0);
+	ERAPI_SpriteFree(sprite_in);
 	ERAPI_SoundPause(SOUND_SPRITE_MUSIC);
 
 	ERAPI_LayerHide(3);
