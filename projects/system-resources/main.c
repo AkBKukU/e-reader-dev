@@ -29,8 +29,8 @@ ERAPI_SPRITE arrow_sprite = {
 	1  // ? frames
 };
 
-ERAPI_HANDLE_SPRITE handle_arrow_r, handle_arrow_l, handle_arrow_menu,
-sprite_in, sprite_out;
+ERAPI_HANDLE_SPRITE handle_arrow_r, handle_arrow_l, handle_arrow_menu;
+ERAPI_HANDLE_SPRITE sprite_in, sprite_out;
 // A utility function to reverse a string
 void reverse(char str[], int length)
 {
@@ -127,11 +127,13 @@ u8 bad_sprite[] = {28,30,31,32,33,34,35,36,48,49,51,52,61,62,63,67,70,71,75,79,9
 	192,197,198,205,206,207,208,211,212,213,215,216,236,237,238,239,240
 };
 int bad_sprite_count = sizeof(bad_sprite);
+u8 sprite_loaded[32];
+u8 sprite_loaded_count=0;
 void sprite_sweep(s8 dir)
 {
 	sprite+=dir;
-	u16 sprite_max=21;
-	if (sprite < 2) sprite = sprite_max;
+	u16 sprite_max=244;
+	if (sprite < 1) sprite = sprite_max;
 	if (sprite>sprite_max) sprite = 1;
 	u8 check = 1;
 
@@ -186,9 +188,11 @@ u8 hud_chooser (ERAPI_HANDLE_REGION chooser, u8 mode, u32 key, u8 show)
 			ERAPI_DrawText( chooser, ERAPI_GetTextWidth(chooser,"   Sound:")+4, 0, num_print);
 			break;
 		case MODE_SPRITE:
-			ERAPI_DrawText( chooser, 0, 0, "   Sprite:");
+			ERAPI_DrawText( chooser, 0, 0, "    Sprite:");
+			citoa(32-sprite_loaded_count,num_print,10);
+			ERAPI_DrawText( chooser, 0, 0, num_print);
 			citoa(sprite,num_print,10);
-			ERAPI_DrawText( chooser, ERAPI_GetTextWidth(chooser,"   Sprite:")+4, 0, num_print);
+			ERAPI_DrawText( chooser, ERAPI_GetTextWidth(chooser,"    Sprite:")+4, 0, num_print);
 			break;
 	};
 	ERAPI_SetSpriteVisible(handle_arrow_l,show);
@@ -231,13 +235,11 @@ void mode_run_sprite(ERAPI_HANDLE_REGION chooser)
 	ERAPI_FadeIn( fade);
 	ERAPI_RenderFrame( fade);
 
-	sprite_in = ERAPI_SpriteCreateSystem( 1, sprite);
-	ERAPI_SetSpritePos( sprite_in, 120, 80);
-
 	// loop
 	quit = 0;
 	u8 timer = 0;
-	u8 show = 1;
+	u8 show = 0;
+	u8 load = 0;
 	int dir = 0;
 	while (quit == 0)
 	{
@@ -249,19 +251,24 @@ void mode_run_sprite(ERAPI_HANDLE_REGION chooser)
 		}else{
 			if (key & ERAPI_KEY_A)
 			{
-				show = !show;
+				int missing = 1;
+				for (u8 i=0;i<sprite_loaded_count;++i)
+				{
+					if (sprite == sprite_loaded[i]) missing = 0;
+				}
+				if (missing) if (sprite_loaded_count < 32)
+				{
+					sprite_loaded[sprite_loaded_count] = sprite;
+					++sprite_loaded_count;
+					load = 1;
+				}
 				timer=debounce;
 			}
 
-			dir = hud_chooser(chooser,MODE_SPRITE,key, show);
+			dir = hud_chooser(chooser,MODE_SPRITE,key, 1);
 			if (dir != 0)
 			{
-				ERAPI_SpriteFree(sprite_in);
 				sprite_sweep(dir);
-				hud_chooser(chooser,MODE_SPRITE,key, show);
-		ERAPI_RenderFrame( 1);
-				sprite_in = ERAPI_SpriteCreateSystem( 1, sprite);
-				ERAPI_SetSpritePos( sprite_in, 120, 80);
 				timer=debounce;
 			}
 
@@ -273,8 +280,21 @@ void mode_run_sprite(ERAPI_HANDLE_REGION chooser)
 		}
 		// quit
 		if (key & ERAPI_KEY_B) quit = 1;
+		show=load;
+		for (u8 i=0;i<sprite_loaded_count;++i)
+		{
+			if (sprite == sprite_loaded[i]) show = 1;
+		}
+
 		// render frame
+		if (show)
+		{
+			sprite_in = ERAPI_SpriteCreateSystem( 1, sprite);
+			ERAPI_SetSpritePos( sprite_in, 120, 80);
+		}
 		ERAPI_RenderFrame( 1);
+		load = 0;
+		if (show) ERAPI_SpriteFree(sprite_in);
 	}
 
 	// Hide everything
@@ -282,7 +302,6 @@ void mode_run_sprite(ERAPI_HANDLE_REGION chooser)
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
 	hud_chooser(chooser,MODE_BACKGROUND,0, 0);
-	ERAPI_SpriteFree(sprite_in);
 	ERAPI_SoundPause(SOUND_SPRITE_MUSIC);
 
 	ERAPI_LayerHide(3);
