@@ -6,20 +6,21 @@ extern int __end[];
 const u16 palette[] = { 0x0000, 0xFFFF };
 
 #include "gfx/gfx.c"
-u8 fade = 50;
 u8 back=2;
 u16 sound=0,sprite=1;
 u8 mode=0, sysexit=0, quit=0, main_menu = 1;
-u32 key=0;
 u8 debounce = 10;
 
 #define SPRITES_MAX 32
+#define  fade  50
 
 #define MODE_MENU 0
 #define MODE_BACKGROUND 1
 #define MODE_SOUND 2
 #define MODE_SPRITE 3
 #define SOUND_MENUMOVE 65
+#define SOUND_MENUMOVE_DOWN 66
+#define SOUND_MENU_MUSIC 738
 #define SOUND_SPRITE_MUSIC 93
 #define SOUND_EXIT 68
 #define SOUND_BACK_MUSIC 82
@@ -31,8 +32,8 @@ ERAPI_HANDLE_REGION region_menu;
 ERAPI_SPRITE arrow_sprite = { 
 	arrow_gfx, 
 	arrow_pal, 
-	2, // Tile X
-	2, // Tile Y
+	1, // Tile X
+	1, // Tile Y
 	2, // Frame Count
 	0, // ?
 	0, // ? width
@@ -42,7 +43,7 @@ ERAPI_SPRITE arrow_sprite = {
 
 ERAPI_HANDLE_SPRITE handle_arrow_r, handle_arrow_l, sprite_in;
 // A utility function to reverse a string
-void reverse(char str[], int length)
+static inline void reverse(char str[], int length)
 {
 	int start = 0;
 	int end = length - 1;
@@ -85,16 +86,14 @@ char* citoa(int num, char* str, int base)
 
 u8 bad_back[] = {28,42,46,47,48,55,62,63,64,71,72,73,79,80,82,83,84,86,87,88,89};
 u8 bad_sound[]={};
-//u8 bad_sprite_count=10;
 u8 bad_sprite[] = {28,30,31,32,33,34,35,36,48,49,51,52,61,62,63,67,70,71,75,79,91,92,94,95,
 	101,103,104,105,108,109,112,122,127,128,129,134,135,147,148,149,163,167,168,172,173,179,189,190,
 	192,197,198,205,206,207,208,211,212,213,215,216,236,237,238,239,240
 };
-int bad_sprite_count = sizeof(bad_sprite);
 u8 sprite_loaded[SPRITES_MAX];
 u8 sprite_loaded_count=0;
 
-void choose_num(s8 dir, u16 *value, u8 min, u16 max, u8 skip[], u8 skip_count )
+static inline void choose_num(s8 dir, u16 *value, u8 min, u16 max, u8 skip[], u8 skip_count )
 {
 	*value += dir;
 	if (*value < min || (*value > max && dir == -1)) *value = max;
@@ -110,6 +109,7 @@ void choose_num(s8 dir, u16 *value, u8 min, u16 max, u8 skip[], u8 skip_count )
 			{
 				*value += dir;
 				check=1;
+				break;
 			}
 		}
 	}
@@ -117,10 +117,10 @@ void choose_num(s8 dir, u16 *value, u8 min, u16 max, u8 skip[], u8 skip_count )
 	return;
 }
 
-u8 hud_chooser (u8 mode, u32 key, u8 show)
+u8 hud_chooser (u8 mode, u8 show)
 {
 	s8 dir = 0;
-	char num_print[5]="test";
+	char num_print[5];
 
 	// Re-Draw
 	ERAPI_ClearRegion(chooser);
@@ -148,17 +148,17 @@ u8 hud_chooser (u8 mode, u32 key, u8 show)
 	ERAPI_SetSpriteVisible(handle_arrow_r,show);
 
 	// Check Inputs
-	if (key & ERAPI_KEY_L)
+	if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_L)
 	{
 		ERAPI_SetSpriteFrame( handle_arrow_l,1);
-		ERAPI_SpriteAutoAnimate(handle_arrow_l,debounce,debounce+ 2);
-		if (mode!=MODE_SOUND) ERAPI_PlaySoundSystem(SOUND_MENUMOVE+1);
+		ERAPI_SpriteAutoAnimate(handle_arrow_l,debounce,12);
+		if (mode!=MODE_SOUND) ERAPI_PlaySoundSystem(SOUND_MENUMOVE_DOWN);
 		dir+=-1;
 	}
-	if (key & ERAPI_KEY_R)
+	if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_R)
 	{
 		ERAPI_SetSpriteFrame( handle_arrow_r,1);
-		ERAPI_SpriteAutoAnimate(handle_arrow_r,debounce,debounce+ 2);
+		ERAPI_SpriteAutoAnimate(handle_arrow_r,debounce,12);
 		if (mode!=MODE_SOUND) ERAPI_PlaySoundSystem(SOUND_MENUMOVE);
 		dir+=1;
 	}
@@ -166,18 +166,13 @@ u8 hud_chooser (u8 mode, u32 key, u8 show)
 	return dir;
 }
 
-void mode_run_sprite()
+static inline void mode_run_sprite()
 {
 	// init
 	ERAPI_LoadBackgroundSystem( 3, 70);
 	ERAPI_LayerShow(3);
 
-	// background
-	u16 back_pos_x=0;
-	u16 back_pos_y=0;
-	ERAPI_SetBackgroundOffset(3,back_pos_x,back_pos_y);
-
-	hud_chooser(MODE_SPRITE,0, 1);
+	hud_chooser(MODE_SPRITE, 1);
 
 
 	ERAPI_PlaySoundSystem(SOUND_SPRITE_MUSIC);
@@ -193,12 +188,11 @@ void mode_run_sprite()
 	while (quit == 0)
 	{
 		// read keys
-		key = ERAPI_GetKeyStateRaw();
 		if (timer)
 		{
 			timer--;
 		}else{
-			if (key & ERAPI_KEY_A)
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_A)
 			{
 				int missing = 1;
 				for (u8 i=0;i<sprite_loaded_count;++i)
@@ -214,7 +208,7 @@ void mode_run_sprite()
 				timer=debounce;
 			}
 
-			dir = hud_chooser(MODE_SPRITE,key, 1);
+			dir = hud_chooser(MODE_SPRITE, 1);
 			if (dir != 0)
 			{
 				choose_num(dir, &sprite, 1, 244, bad_sprite,sizeof(bad_sprite));
@@ -222,7 +216,7 @@ void mode_run_sprite()
 			}
 		}
 		// quit
-		if (key & ERAPI_KEY_B) quit = 1;
+		if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_B) quit = 1;
 		show=load;
 		for (u8 i=0;i<sprite_loaded_count;++i)
 		{
@@ -244,7 +238,7 @@ void mode_run_sprite()
 	ERAPI_PlaySoundSystem(SOUND_EXIT);
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
-	hud_chooser(MODE_BACKGROUND,0, 0);
+	hud_chooser(MODE_SPRITE, 0);
 	ERAPI_SoundPause(SOUND_SPRITE_MUSIC);
 
 	ERAPI_LayerHide(3);
@@ -253,24 +247,23 @@ void mode_run_sprite()
 	return;
 }
 
-
-void mode_run_sound()
+s8 bg_scroll[3][3] = {
+	{8,-55,80},
+	{21,0,40},
+	{60,45,20}
+};
+static inline void mode_run_sound()
 {
-	// init
-	ERAPI_LoadBackgroundSystem( 3, 60);
-	ERAPI_LayerShow(3);
-	ERAPI_SetBackgroundOffset(3,0,45);
-	ERAPI_SetBackgroundAutoScroll(3,20,0);
-	ERAPI_LoadBackgroundSystem( 2, 21);
-	ERAPI_LayerShow(2);
-	ERAPI_SetBackgroundOffset(2,0,0);
-	ERAPI_SetBackgroundAutoScroll(2,40,0);
-	ERAPI_LoadBackgroundSystem( 1, 8);
-	ERAPI_LayerShow(1);
-	ERAPI_SetBackgroundOffset(1,0,-55);
-	ERAPI_SetBackgroundAutoScroll(1,80,0);
+	// Load and configure backgrounds
+	for (u8 i = 3 ; i ; --i)
+	{
+		ERAPI_LoadBackgroundSystem( i, bg_scroll[i-1][0]);
+		ERAPI_SetBackgroundOffset(i,0,bg_scroll[i-1][1]);
+		ERAPI_SetBackgroundAutoScroll(i,bg_scroll[i-1][2],0);
+		ERAPI_LayerShow(i);
+	}
 
-	hud_chooser(MODE_SOUND,0, 1);
+	hud_chooser(MODE_SOUND, 1);
 
 
 	ERAPI_FadeIn( fade);
@@ -284,18 +277,17 @@ void mode_run_sound()
 	while (quit == 0)
 	{
 		// read keys
-		key = ERAPI_GetKeyStateRaw();
 		if (timer)
 		{
 			timer--;
 		}else{
-			if (key & ERAPI_KEY_A)
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_A)
 			{
 				ERAPI_PlaySoundSystem(sound);
 				timer=debounce;
 			}
 
-			dir = hud_chooser(MODE_SOUND,key, show);
+			dir = hud_chooser(MODE_SOUND, show);
 			if (dir != 0)
 			{
 				ERAPI_SoundPause(sound);
@@ -303,10 +295,9 @@ void mode_run_sound()
 				ERAPI_PlaySoundSystem(sound);
 				timer=debounce;
 			}
-
 		}
 		// quit
-		if (key & ERAPI_KEY_B) quit = 1;
+		if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_B) quit = 1;
 		// render frame
 		ERAPI_RenderFrame( 1);
 	}
@@ -315,23 +306,22 @@ void mode_run_sound()
 	ERAPI_PlaySoundSystem(SOUND_EXIT);
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
-	hud_chooser(MODE_BACKGROUND,0, 0);
+	hud_chooser(MODE_BACKGROUND, 0);
 
-	ERAPI_LayerHide(1);
-	ERAPI_SetBackgroundAutoScroll(1,0,0);
-	ERAPI_SetBackgroundOffset(1,0,0);
-	ERAPI_LayerHide(2);
-	ERAPI_SetBackgroundAutoScroll(2,0,0);
-	ERAPI_SetBackgroundOffset(2,0,0);
-	ERAPI_LayerHide(3);
-	ERAPI_SetBackgroundAutoScroll(3,0,0);
-	ERAPI_SetBackgroundOffset(3,0,0);
+
+	// Unload and unconfigure backgrounds
+	for (u8 i = 3 ; i ; --i)
+	{
+		ERAPI_SetBackgroundOffset(i,0,0);
+		ERAPI_SetBackgroundAutoScroll(i,0,0);
+		ERAPI_LayerHide(i);
+	}
 
 	mode = 0;
 	return;
 }
 
-void background()
+static inline void background()
 {
 	// init
 	ERAPI_LoadBackgroundSystem( 3, back);
@@ -342,7 +332,7 @@ void background()
 	u16 back_pos_y=0;
 	ERAPI_SetBackgroundOffset(3,back_pos_x,back_pos_y);
 
-	hud_chooser(MODE_BACKGROUND,0, 1);
+	hud_chooser(MODE_BACKGROUND, 1);
 
 
 	ERAPI_PlaySoundSystem(SOUND_BACK_MUSIC);
@@ -357,30 +347,31 @@ void background()
 	while (quit == 0)
 	{
 		// read keys
-		key = ERAPI_GetKeyStateRaw();
 		if (timer)
 		{
 			timer--;
 		}else{
-			if (key & ERAPI_KEY_A)
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_A)
 			{
 				show = !show;
 				timer=debounce;
 			}
 
-			dir = hud_chooser(MODE_BACKGROUND,key, show);
-			choose_num(dir, &back, 0, 101, bad_back,sizeof(bad_back));
-			ERAPI_LoadBackgroundSystem( 3, back);
-			if (dir != 0)timer=debounce;
+			dir = hud_chooser(MODE_BACKGROUND, show);
+			if (dir != 0){
+				choose_num(dir, &back, 0, 101, bad_back,sizeof(bad_back));
+				ERAPI_LoadBackgroundSystem( 3, back);
+				timer=debounce;
+			}
 
-			if (key & ERAPI_KEY_LEFT) back_pos_x--;
-			if (key & ERAPI_KEY_RIGHT) back_pos_x++;
-			if (key & ERAPI_KEY_UP) back_pos_y--;
-			if (key & ERAPI_KEY_DOWN) back_pos_y++;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_LEFT) back_pos_x--;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_RIGHT) back_pos_x++;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_UP) back_pos_y--;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_DOWN) back_pos_y++;
 			ERAPI_SetBackgroundOffset(3,back_pos_x,back_pos_y);
 		}
 		// quit
-		if (key & ERAPI_KEY_B) quit = 1;
+		if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_B) quit = 1;
 		// render frame
 		ERAPI_RenderFrame( 1);
 	}
@@ -389,7 +380,7 @@ void background()
 	ERAPI_PlaySoundSystem(SOUND_EXIT);
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
-	hud_chooser(MODE_BACKGROUND,0, 0);
+	hud_chooser(MODE_BACKGROUND, 0);
 	ERAPI_SoundPause(SOUND_BACK_MUSIC);
 
 	ERAPI_LayerHide(3);
@@ -398,9 +389,9 @@ void background()
 	return;
 }
 
-void menu ()
+static inline void menu ()
 {
-	ERAPI_ClearRegion(region_menu);
+	//ERAPI_ClearRegion(region_menu);
 	ERAPI_SetTextColor( region_menu, 0x2, 0);
 	ERAPI_DrawText( region_menu, 0, 0, "System Assets");
 
@@ -414,7 +405,7 @@ void menu ()
 	ERAPI_LoadBackgroundSystem( 1, 24);
 	ERAPI_SetBackgroundAutoScroll(1,0,0x40);
 
-	ERAPI_PlaySoundSystem(738);
+	ERAPI_PlaySoundSystem(SOUND_MENU_MUSIC);
 	ERAPI_FadeIn( fade);
 	ERAPI_RenderFrame( fade);
 
@@ -425,36 +416,35 @@ void menu ()
 	while (quit == 0)
 	{
 		// read keys
-		key = ERAPI_GetKeyStateRaw();
 		if (timer)
 		{
 			timer--;
 		}else{
-			if (key & ERAPI_KEY_A)
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_A)
 			{
 				ERAPI_SetSpriteFrame( handle_arrow_r,1);
-				ERAPI_SpriteAutoAnimate(handle_arrow_r,debounce,debounce+ 2);
+				ERAPI_SpriteAutoAnimate(handle_arrow_r,debounce,12);
 				mode = main_menu;
 				ERAPI_PlaySoundSystem(86);
 				quit = 1;
 			}
 
-			if (key & ERAPI_KEY_UP)
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_UP)
 			{
 				main_menu--;
 				if (main_menu<1) main_menu=3;
 				ERAPI_PlaySoundSystem(SOUND_MENUMOVE);
 				timer=debounce;
 			}
-			if (key & ERAPI_KEY_DOWN)
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_DOWN)
 			{
 				main_menu++;
 				if (main_menu>3) main_menu=1;
-				ERAPI_PlaySoundSystem(SOUND_MENUMOVE+1);
+				ERAPI_PlaySoundSystem(SOUND_MENUMOVE_DOWN);
 				timer=debounce;
 			}
 			// quit
-			if (key & ERAPI_KEY_B)
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_B)
 			{
 				ERAPI_PlaySoundSystem(68);
 				quit = 1;
@@ -464,7 +454,7 @@ void menu ()
 		ERAPI_SetSpritePos( handle_arrow_r, 60, 60+(main_menu * 14));
 		ERAPI_RenderFrame( 1);
 	}
-	ERAPI_SoundPause(738);
+	ERAPI_SoundPause(SOUND_MENU_MUSIC);
 	ERAPI_FadeOut(fade);
 	ERAPI_RenderFrame( fade);
 	ERAPI_LayerHide(1);
@@ -496,7 +486,7 @@ int main()
 	region_menu = ERAPI_CreateRegion( 0, 0, 0xa, 0x06, 0x0A, 0x08);
 	chooser = ERAPI_CreateRegion(0,0,0x0a, 0x02,0xc, 0x01);
 	ERAPI_SetTextColor( chooser, 0x01, 0x00);
-	hud_chooser(MODE_MENU,0, 0);
+	hud_chooser(MODE_MENU, 0);
 
 	// Main Loop
 	while (sysexit == 0)
