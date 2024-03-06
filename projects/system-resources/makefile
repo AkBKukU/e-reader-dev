@@ -60,7 +60,7 @@ build/$(TARGET).bin : build/$(TARGET).elf
 build/$(TARGET).elf : build/crt0.o build/$(TARGET).o ../../lib/ereader.ld
 	$(LD) build/crt0.o build/$(TARGET).o  -L $(PATH_LIB_GCC) -T ../../lib/ereader.ld -O3 -o "$@"
 
-build/$(TARGET).o : $(TARGET).c gfx/gfx.c 
+build/$(TARGET).o : $(TARGET).c gfx/gfx.c
 	$(GCC) -I ../../lib -mthumb -c -O2 -o "$@" "$<"
 
 build/crt0.o : ../../lib/crt0.s

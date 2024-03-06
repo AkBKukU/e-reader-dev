@@ -183,7 +183,16 @@ struct _ERAPI_BACKGROUND
 //            b: Text
 //            Return: Pixel count
 #define ERAPI_GetTextWidthEx(a,b,c)                       ERAPI_FUNC_X3( 0x2C1, (a << 8) | c, (u32)b)
+#define ERAPI_02C2(a)                                     ERAPI_FUNC_X2( 0x2C2, (u32)a)
+#define ERAPI_02C3(a)                                     ERAPI_FUNC_X2( 0x2C3, a)
+#define ERAPI_02DD(a,b)                                   ERAPI_FUNC_X3( 0x2DD, a, b)
+#define ERAPI_FlashWriteSectorSingle(a,b)	          ERAPI_FUNC_X3( 0x2DE, a, (u32)b)
+#define ERAPI_FlashReadSectorSingle(a,b)                  ERAPI_FUNC_X3( 0x2DF, a, (u32)b)
+#define ERAPI_SoftReset()                                 ERAPI_FUNC_X1( 0x2E0)
 #define ERAPI_InitMemory(a)                               ERAPI_FUNC_X2( 0x2EA, a)
+#define ERAPI_FlashWriteSectorMulti(a,b,c)                ERAPI_FUNC_X4( 0x2ED, a, b, c)
+#define ERAPI_FlashReadPart(a,b,c)                        ERAPI_FUNC_X4( 0x2EE, a, (u32)b, c)
+#define ERAPI_RandInit(a)                                 ERAPI_FUNC_X2( 0x2F1, a)
 #define ERAPI_RenderFrame(a)                              ERAPI_FUNC_X2( 0x300, a)
 //            a: Number of frames to render before returning
 #define ERAPI_GetKeyStateSticky()                         ERAPI_FUNC_X1( 0x301)
