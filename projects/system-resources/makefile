@@ -51,7 +51,7 @@ $(TARGET).sav : build/$(TARGET).vpk
 
 # GBA Binary
 build/$(TARGET).vpk : build/$(TARGET).bin
-	$(NEVPK) -i "$<" -o "$@" -c -level 0
+	$(NEVPK) -i "$<" -o "$@" -c -level 3
 
 
 build/$(TARGET).bin : build/$(TARGET).elf
