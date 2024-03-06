@@ -5,19 +5,19 @@ extern int __end[];
 
 const u16 palette[] = { 0x0000, 0xFFFF };
 
-#include "gfx/gfx.c"
 u8 back=2;
 u16 sound=0,sprite=1;
 u8 mode=0, sysexit=0, quit=0, main_menu = 1;
 u8 debounce = 10;
 
 #define SPRITES_MAX 32
-#define  fade  50
+#define FADE  50
 
 #define MODE_MENU 0
 #define MODE_BACKGROUND 1
 #define MODE_SOUND 2
 #define MODE_SPRITE 3
+
 #define SOUND_MENUMOVE 65
 #define SOUND_MENUMOVE_DOWN 66
 #define SOUND_MENU_MUSIC 738
@@ -29,6 +29,7 @@ ERAPI_HANDLE_REGION chooser;
 ERAPI_HANDLE_REGION region_menu;
 
 // Sprite for arrows
+#include "gfx/gfx.c"
 ERAPI_SPRITE arrow_sprite = { 
 	arrow_gfx, 
 	arrow_pal, 
@@ -42,6 +43,7 @@ ERAPI_SPRITE arrow_sprite = {
 };
 
 ERAPI_HANDLE_SPRITE handle_arrow_r, handle_arrow_l, sprite_in;
+
 // A utility function to reverse a string
 static inline void reverse(char str[], int length)
 {
@@ -176,8 +178,8 @@ static inline void mode_run_sprite()
 
 
 	ERAPI_PlaySoundSystem(SOUND_SPRITE_MUSIC);
-	ERAPI_FadeIn( fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeIn( FADE);
+	ERAPI_RenderFrame( FADE);
 
 	// loop
 	quit = 0;
@@ -236,8 +238,8 @@ static inline void mode_run_sprite()
 
 	// Hide everything
 	ERAPI_PlaySoundSystem(SOUND_EXIT);
-	ERAPI_FadeOut(fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeOut(FADE);
+	ERAPI_RenderFrame( FADE);
 	hud_chooser(MODE_SPRITE, 0);
 	ERAPI_SoundPause(SOUND_SPRITE_MUSIC);
 
@@ -266,8 +268,8 @@ static inline void mode_run_sound()
 	hud_chooser(MODE_SOUND, 1);
 
 
-	ERAPI_FadeIn( fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeIn( FADE);
+	ERAPI_RenderFrame( FADE);
 
 	// loop
 	quit = 0;
@@ -304,8 +306,8 @@ static inline void mode_run_sound()
 
 	// Hide everything
 	ERAPI_PlaySoundSystem(SOUND_EXIT);
-	ERAPI_FadeOut(fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeOut(FADE);
+	ERAPI_RenderFrame( FADE);
 	hud_chooser(MODE_BACKGROUND, 0);
 
 
@@ -336,8 +338,8 @@ static inline void background()
 
 
 	ERAPI_PlaySoundSystem(SOUND_BACK_MUSIC);
-	ERAPI_FadeIn( fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeIn( FADE);
+	ERAPI_RenderFrame( FADE);
 
 	// loop
 	quit = 0;
@@ -378,8 +380,8 @@ static inline void background()
 
 	// Hide everything
 	ERAPI_PlaySoundSystem(SOUND_EXIT);
-	ERAPI_FadeOut(fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeOut(FADE);
+	ERAPI_RenderFrame( FADE);
 	hud_chooser(MODE_BACKGROUND, 0);
 	ERAPI_SoundPause(SOUND_BACK_MUSIC);
 
@@ -406,8 +408,8 @@ static inline void menu ()
 	ERAPI_SetBackgroundAutoScroll(1,0,0x40);
 
 	ERAPI_PlaySoundSystem(SOUND_MENU_MUSIC);
-	ERAPI_FadeIn( fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeIn( FADE);
+	ERAPI_RenderFrame( FADE);
 
 
 	// loop
@@ -455,8 +457,8 @@ static inline void menu ()
 		ERAPI_RenderFrame( 1);
 	}
 	ERAPI_SoundPause(SOUND_MENU_MUSIC);
-	ERAPI_FadeOut(fade);
-	ERAPI_RenderFrame( fade);
+	ERAPI_FadeOut(FADE);
+	ERAPI_RenderFrame( FADE);
 	ERAPI_LayerHide(1);
 	ERAPI_ClearRegion(region_menu);
 	ERAPI_SetSpriteVisible(handle_arrow_r,0);
