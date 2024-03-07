@@ -22,6 +22,7 @@ u8 debounce = 10;
 #define SOUND_MENUMOVE_DOWN 66
 #define SOUND_MENU_MUSIC 738
 #define SOUND_SPRITE_MUSIC 93
+#define SOUND_SPRITE_SHOW 16
 #define SOUND_EXIT 68
 #define SOUND_BACK_MUSIC 82
 
@@ -203,6 +204,7 @@ static inline void mode_run_sprite()
 				}
 				if (missing) if (sprite_loaded_count < SPRITES_MAX)
 				{
+					ERAPI_PlaySoundSystem(SOUND_SPRITE_SHOW);
 					sprite_loaded[sprite_loaded_count] = sprite;
 					++sprite_loaded_count;
 					load = 1;

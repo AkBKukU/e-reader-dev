@@ -29,3 +29,12 @@ The different mods of the program let you see different resources.
 
 Note: There is a limitation I have not been abl to solve that causes the system to crash after loading too many sprites. My suspicion is the provided API does not full unallocate the data for the sprites or changes the pointer position where it attempts to load new sprites into an inappropriate memory location. From my tests, the program will crash after loading 36 sprites, a limit of 32 has been put in place for some headroom. So you must manually load each sprite to view them and once you have exhausted the 32 spaces, completely restart the system, and continue from where you left off.
 
+## Additional Code Information
+
+An attempt has been made to make the final compiled executable for this software as small as possible. It currently compiles to about 2,600 bytes once compressed with VPK. One Dot Code strip is capable of holding somewhere around 2,020 bytes from my testing. I reached a point where it was not feasible to reduce the code size with compression farther without reducing functionality. A more significant rewrite may be able to restructure the code in a more optimal way, but as this exists I don't think it is possible to shave enough to fit it on a single strip.
+
+An interesting anecdote from this testing though, the custom sprite used in this program used surprisingly little space with compression. At worst it was 110 bytes. I predict attempting to switch it out for pixel drawn graphics would take more space in code.
+
+
+
+
