@@ -173,6 +173,7 @@ static inline void mode_run_sprite()
 {
 	// init
 	ERAPI_LoadBackgroundSystem( 3, 70);
+	ERAPI_SetBackgroundOffset(3,0,0);
 	ERAPI_LayerShow(3);
 
 	hud_chooser(MODE_SPRITE, 1);

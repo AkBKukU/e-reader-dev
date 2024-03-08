@@ -22,8 +22,8 @@ NEVPK    = nevpk
 NEDCMAKE = nedcmake
 NEDCENC  = nedcenc
 NEDCBMP  = raw2bmp
-#NESAV    = wine ../../bin/neflmake.exe # linux
-NESAV    = ../../bin/neflmake.exe # WSL
+NESAV    = wine ../../bin/neflmake.exe # linux
+#NESAV    = ../../bin/neflmake.exe # WSL
 
 all : sav bmp
 
