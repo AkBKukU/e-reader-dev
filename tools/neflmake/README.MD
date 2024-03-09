@@ -15,3 +15,13 @@
 
 
 This is the source code to the `neflmake` make tool by Tim Schuerewegen, provided here with permission.
+
+## Building for Linux
+
+To build for linux enter the `platform/linux` directory and run `make`. The `neflmake` binary should be produced from that.  
+  
+### Changes
+Some changes have been made to the original code
+
+ - The `exe` extension was removed and the `japtext.o` dependancy added to the `makefile`
+ - `stricmp` is no longer part of the standard libraries and has been added to the custom `strutil.h` source.

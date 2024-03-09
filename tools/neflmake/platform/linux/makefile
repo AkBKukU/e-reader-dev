@@ -2,8 +2,8 @@ SRCDIR = ../../source
 DSTDIR = ./release
 
 #SRC = main.c crc32.c strutil.c filefunc.c
-OBJ = $(DSTDIR)/main.o $(DSTDIR)/crc32.o $(DSTDIR)/strutil.o $(DSTDIR)/filefunc.o
-EXE = neflmake.exe
+OBJ = $(DSTDIR)/main.o $(DSTDIR)/crc32.o $(DSTDIR)/strutil.o $(DSTDIR)/filefunc.o $(DSTDIR)/japtext.o
+EXE = neflmake
 
 CC = gcc
 RM = rm

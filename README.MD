@@ -21,9 +21,8 @@ enviornment first.
 
 This repo has been setup primarily as a linux first development enviornment.
 However, I have been simultaneously been testing it with WSL Ubuntu and have
-had no issues (other than the flash save file tool needing `wine` on linux
-and being able to run natively on Windows.) It should be entirely possible to
-use this setup on either Windows or Linux as a result.
+had no issues. It should be entirely possible to use this setup on either
+Windows or Linux as a result.
 
 ## Understanding The Development Tools
 
@@ -97,9 +96,11 @@ the input to the next step. There is a variance when your program becomes large
 enough to split across multiple cards (which I am not able to cover yet.)
 
 There is one alternative step 2 you can do when doing development. Using 
-[neflashmaker](https://www.caitsith2.com/ereader/tools/neflashmaker10.zip)
+[neflmake](https://github.com/AkBKukU/e-reader-dev/tree/main/tools/neflmake)
 will encode the program in a way GBA emulators can load as game save data. The 
 E-Reader can store software on it, and this can "inject" your program into it.
+You can also use this with the real E-Reader cart to load a program if you have
+hardware capable of writing GBA cart save data.
 
 
 ## General GBA Dev Tools
