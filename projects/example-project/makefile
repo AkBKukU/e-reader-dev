@@ -68,5 +68,5 @@ clean :
 	rm -f build/*.elf
 	rm -f build/*.raw
 	rm -f build/*.vpk
-	rm -f gfx/*.gfx gfx/*.pal gfx/*.c
+	rm -f gfx/*.gfx gfx/*.pal gfx/*.c  gfx/*.h
 	rm -f *.bmp *.sav

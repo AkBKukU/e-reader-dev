@@ -7,8 +7,8 @@ This directory should contain the build tools needed.
 ### Loose
 
  - [gfx2gba](https://www.gbadev.org/tools.php?showinfo=142)  - Needs compiled for linux
- - [b2x](http://www.devrs.com/gb/files/b2x.zip) - Needs compiled for linux
  - [neflmake](https://github.com/AkBKukU/e-reader-dev/tree/main/tools/neflmake) - Included here already
+ - [raw2gba](https://github.com/AkBKukU/raw2gba) - Included here already (By IanFinlayson, my fork just replaces periods with underscores for array names.)
 
 ### Groups
 Compile these separately and move the executables here.
