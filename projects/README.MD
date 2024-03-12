@@ -14,9 +14,9 @@ used. It is based off of the [Mario Sprite](https://web.archive.org/web/20160514
 example by Tim Schuerewegen but modified with a different sprite image.
 
 The build process has also been changed to simplify how image files are 
-included. A `gfx` folder has been added that has a self contained C Array
-generation script that puts all graphics data into `gfx/gfx.c` to make inclusion
-in the program easier. This script could be further expanded, for example, to 
+included. A `gfx` folder has been added that that all graphics data should go
+into. It will be converted and put into `gfx/gfx.c` for inclusion in the 
+program easier. This script could be further expanded, for example, to 
 check filenames for information such as the color depth of the desired sprite.
 
 This project also puts all intermediate files into `build/` to clean up the 
