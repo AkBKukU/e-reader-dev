@@ -60,7 +60,7 @@ build/crt0.o : ../../lib/crt0.s
 
 # Graphics
 gfx/gfx.c :
-	gfx/convert.sh
+	grit gfx/*.tga -gu8 -gB4 -ftc -fh! -pS -fa -ogfx/gfx
 
 clean :
 	rm -f build/*.o

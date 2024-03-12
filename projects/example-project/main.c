@@ -11,8 +11,8 @@ extern int __end[];
 
 const u16 palette[] = { 0x0000, 0xFFFF };
 
-#include "gfx/gfx.h"
-ERAPI_SPRITE mario_sprite = { marioTiles, SharedPal, 4, 4, 1, 1, 8, 8, 1};
+#include "gfx/gfx.c"
+ERAPI_SPRITE mario_sprite = { marioTiles, gfxSharedPal, 4, 4, 1, 4, 8, 8, 1};
 
 u32 mario_pos_x, mario_pos_y, mario_size;
 ERAPI_HANDLE_SPRITE handle_mario;

@@ -30,10 +30,10 @@ ERAPI_HANDLE_REGION chooser;
 ERAPI_HANDLE_REGION region_menu;
 
 // Sprite for arrows
-#include "gfx/gfx.h"
+#include "gfx/gfx.c"
 ERAPI_SPRITE arrow_sprite = { 
-	arrow_tga_gfx,
-	arrow_tga_pal,
+	arrowTiles,
+	gfxSharedPal,
 	1, // Tile X
 	1, // Tile Y
 	2, // Frame Count
