@@ -9,7 +9,7 @@ const u16 palette[] = { 0x0000, 0xFFFF };
 u8 sysexit = 0, win = 0;
 u32 key;
 #define INPUT_DELAY 5
-char print[0xFFFF];
+char print[0xFFF];
 
 char test_up[]="Up button pressed last";
 char test_down[]="Down button pressed last";
