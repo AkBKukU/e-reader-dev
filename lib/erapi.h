@@ -187,7 +187,11 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_02C3(a)                                     ERAPI_FUNC_X2( 0x2C3, a)
 #define ERAPI_02DD(a,b)                                   ERAPI_FUNC_X3( 0x2DD, a, b)
 #define ERAPI_FlashWriteSectorSingle(a,b)	          ERAPI_FUNC_X3( 0x2DE, a, (u32)b)
+//            a: Sector index
+//            a: Pointer to read data from
 #define ERAPI_FlashReadSectorSingle(a,b)                  ERAPI_FUNC_X3( 0x2DF, a, (u32)b)
+//            a: Sector index
+//            a: Pointer to read data into
 #define ERAPI_SoftReset()                                 ERAPI_FUNC_X1( 0x2E0)
 #define ERAPI_InitMemory(a)                               ERAPI_FUNC_X2( 0x2EA, a)
 #define ERAPI_FlashWriteSectorMulti(a,b,c)                ERAPI_FUNC_X4( 0x2ED, a, b, c)
