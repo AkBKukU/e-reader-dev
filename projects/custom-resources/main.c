@@ -3,7 +3,7 @@
 
 #include "gfx/gfx.h"
 #include "map/map.h"
-//#include "snd/snd.h" // The goal is to later add sound but so far I haven't got ERAPI_PlaySoundCustom to behave predictably
+#include "snd/mario_raw.h" // The goal is to later add sound but so far I haven't got ERAPI_PlaySoundCustom to behave predictably
 
 #define MAZE_GRID 8
 #define MAZE_WIDTH 32
@@ -20,6 +20,7 @@ u16 MAZE_OPEN, MAZE_FINISH;
 
 u16 rainPal[mapSharedPalLen/2];
 
+char test[]="This is a line of text I'm going to save";
 
 ERAPI_BACKGROUND background =
 {
@@ -44,7 +45,6 @@ static inline void init()
 	player_handle = ERAPI_SpriteCreateCustom( 0, &player_sprite);
 	MAZE_OPEN = mapMap[1];
 	MAZE_FINISH = mapMap[28+19*MAZE_WIDTH];
-
 	ERAPI_FadeIn( 1);
 }
 void pmove(s8 x, s8 y)
@@ -116,21 +116,26 @@ int main()
 			} else {
 				if (key & ERAPI_KEY_LEFT)
 				{
+					ERAPI_PlaySoundCustom(audio1_raw,audio1_raw_bytes);
 					pmove(-1,0);
 					delay = INPUT_DELAY;
 				}
 				if (key & ERAPI_KEY_RIGHT)
 				{
+					ERAPI_PlaySoundCustom(audio2_raw,audio2_raw_bytes);
 					pmove(1,0);
 					delay = INPUT_DELAY;
 				}
 				if (key & ERAPI_KEY_UP)
 				{
+					ERAPI_PlaySoundCustom(audio3_raw,audio3_raw_bytes);
+					ERAPI_FlashWriteSectorSingle(1,&test);
 					pmove(0,-1);
 					delay = INPUT_DELAY;
 				}
 				if (key & ERAPI_KEY_DOWN)
 				{
+					ERAPI_PlaySoundCustom(audio4_raw,audio4_raw_bytes);
 					pmove(0,1);
 					delay = INPUT_DELAY;
 				}
