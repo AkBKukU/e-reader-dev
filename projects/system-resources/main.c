@@ -369,10 +369,10 @@ static inline void background()
 				timer=debounce;
 			}
 
-			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_LEFT) back_pos_x--;
-			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_RIGHT) back_pos_x++;
-			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_UP) back_pos_y--;
-			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_DOWN) back_pos_y++;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_LEFT) back_pos_x++;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_RIGHT) back_pos_x--;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_UP) back_pos_y++;
+			if (ERAPI_GetKeyStateRaw() & ERAPI_KEY_DOWN) back_pos_y--;
 			ERAPI_SetBackgroundOffset(3,back_pos_x,back_pos_y);
 		}
 		// quit
@@ -398,7 +398,7 @@ static inline void menu ()
 {
 	//ERAPI_ClearRegion(region_menu);
 	ERAPI_SetTextColor( region_menu, 0x2, 0);
-	ERAPI_DrawText( region_menu, 0, 0, "System Assets");
+	ERAPI_DrawText( region_menu, 0, 0, "System Resources");
 
 	ERAPI_DrawText( region_menu, 0, 22, "Backgrounds");
 	ERAPI_DrawText( region_menu, 0, 36, "Sounds");
@@ -488,7 +488,7 @@ int main()
 	ERAPI_SetBackgroundPalette( &palette[0], 0x00, 0x02);
 
 	// Create regions for text display
-	region_menu = ERAPI_CreateRegion( 0, 0, 0xa, 0x06, 0x0A, 0x08);
+	region_menu = ERAPI_CreateRegion( 0, 0, 0x9, 0x06, 0x0d, 0x08);
 	chooser = ERAPI_CreateRegion(0,0,0x0a, 0x02,0xc, 0x01);
 	ERAPI_SetTextColor( chooser, 0x01, 0x00);
 	hud_chooser(MODE_MENU, 0);
