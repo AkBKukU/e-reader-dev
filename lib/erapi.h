@@ -132,7 +132,10 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_SpriteAutoRotateByTime(a,b,c)               ERAPI_FUNC_X4( 0x240, a, b, c)
 #define ERAPI_SetSpriteAutoMoveHorizontal(a,b)            ERAPI_FUNC_X3( 0x242, a, b)
 #define ERAPI_SetSpriteAutoMoveVertical(a,b)              ERAPI_FUNC_X3( 0x243, a, b)
-#define ERAPI_SpriteDrawOnBackground(a,b,c)   	          ERAPI_FUNC_X4( 0x245, a, b, c)
+#define ERAPI_SpriteDrawOnBackground(a,b,c)   	          ERAPI_FUNC_X4
+//            a: Sprite Handle
+//            b: Background Layer
+//            c: Sprite Palette pointer
 #define ERAPI_SpriteShow(a)			          ERAPI_FUNC_X2( 0x246, a)
 //            a: Sprite Handle
 #define ERAPI_SpriteHide(a)			          ERAPI_FUNC_X2( 0x247, a)
@@ -201,6 +204,58 @@ struct _ERAPI_BACKGROUND
 //            a: Number of frames to render before returning
 #define ERAPI_GetKeyStateSticky()                         ERAPI_FUNC_X1( 0x301)
 #define ERAPI_GetKeyStateRaw()                            ERAPI_FUNC_X1( 0x302)
+
+#define ERAPI_CalcDistanceBetweenPoints(a,b,c,d)          ERAPI_FUNC_X5( 0x2B2, a, b, c, d)
+
+#define ERAPI_CalcDistanceBetweenSprites(a,b)             ERAPI_FUNC_X3( 0x2AB, a, b)
+//            a: u16 Sprite Handle
+//            b: u16 Sprite Handle
+//            Return: u16 Distance
+
+#define ERAPI_CalcAngleBetweenSprites(a,b)                ERAPI_FUNC_X3( 0x2AC, a, b)
+//            a: u16 Sprite Handle
+//            b: u16 Sprite Handle
+//            Return: u8 Angle (0-255)
+#define ERAPI_ScanDotCode(a)                              ERAPI_FUNC_X2( 0x2C2, (u32)a)
+//            a: u8* Data (minimum 0x81C bytes)
+//            Return: u8 Status (0: ok, 1: read error, 4: timeout, 5: wrong region)
+
+#define ERAPI_SpriteSetPosAnimatedDuration(a,b,c,d)       ERAPI_FUNC_X5( 0x23B, a, b, c, d)
+//            a: u16 Sprite Handle
+//            b: u16 X Position
+//            c: u16 Y Position
+//            d: u8 Duration (fixed duration, variable speed, depends on distance)
+
+#define ERAPI_SpriteSetPosAnimatedSpeed(a,b,c,d)          ERAPI_FUNC_X5( 0x2DA, a, b, c, d)
+//            a: u16 Sprite Handle
+//            b: u16 X Position
+//            c: u16 Y Position
+//            d: u16 Speed (fixed speed, variable duration, depends on distance)
+
+#define ERAPI_SpriteSetType(a,b)                          ERAPI_FUNC_X3( 0x268, a, b)
+//            a: u16 Sprite Handle
+//            b: u8 Type
+
+#define ERAPI_SpriteGetType(a)                            ERAPI_FUNC_X2( 0x269, a)
+//            a: u16 Sprite Handle
+//            Return: u8 Type
+
+#define ERAPI_SpriteFindClosestSprite(a,b,c)              ERAPI_FUNC_X4( 0x2AA, a, b, (u32)c)
+//            a: u16 Sprite Handle
+//            b: u8 Type
+//            c: u16* Distance (0 if no sprites of specified type exist)
+//            Return: u16 Sprite Handle (187 if no sprites of specified type exist)
+
+#define ERAPI_Sin(a,b)                                    ERAPI_FUNC_X3( 0x2B5, a, b)
+//            a: u8 Angle
+//            d: u16 Multiply
+//            Return: s16 Result
+
+#define ERAPI_Cos(a,b)                                    ERAPI_FUNC_X3( 0x2B6, a, b)
+//            a: u8 Angle
+//            d: u16 Multiply
+//            Return: s16 Result
+
 #endif
 
 #endif
