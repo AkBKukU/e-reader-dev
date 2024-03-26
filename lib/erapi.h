@@ -170,7 +170,14 @@ struct _ERAPI_BACKGROUND
 #define ERAPI_ClearRegion(a)                              ERAPI_FUNC_X2( 0x292, a)
 //            a: Region
 #define ERAPI_SetPixel(a,b,c)                             ERAPI_FUNC_X3( 0x293, a, (b << 8) | c)
+// Color set with ERAPI_SetRegionColor
+//            a: Region
+//            b: x position in tiles
+//            c: y position in tiles
 #define ERAPI_GetPixel(a,b,c)                             ERAPI_FUNC_X3( 0x294, a, (b << 8) | c)
+//            a: Region
+//            b: x position in tiles
+//            c: y position in tiles
 #define ERAPI_DrawLine(a,b,c,d,e,f)                       ERAPI_FUNC_X5( 0x295, a, (b << 8) | c, (d << 8) | e,f)
 //            a: Region
 //            b: start x position in pixels
