@@ -40,16 +40,17 @@ typedef u16 ERAPI_HANDLE_SPRITE;
 typedef struct _ERAPI_SPRITE ERAPI_SPRITE;
 struct _ERAPI_SPRITE
 {
-  u8* data_gfx; // Tile data:		.... .... .... .... .... 
-  u8* data_pal; // Palette data:	.... .... .... .... ....
-  u8 width;     // Width in tiles:	0x08 0x06 0x06 0x02 0x04
-  u8 height;    // Height in tiles:	0x08 0x06 0x02 0x02 0x04
-  u8 frames;    // Frame count:		0x04 0x04 0x02 0x02 0x04
-  u8 unk1;      // Unknown: 		0x01 0x01 0x01 0x01 0x01
-  u8 unk2;      // Unknown width:	0x08 0x00 0x00 0x00 0x00
-  u8 unk3;      // Unknown height:	0x08 0x00 0x00 0x00 0x00
-  u8 unk4;      // Unknown frames:	0x03 0x04 0x02 0x02 0x04
+  u8* data_gfx; // Tile data:       .... .... .... .... ....
+  u8* data_pal; // Palette data:    .... .... .... .... ....
+  u8 width;     // Width in tiles:  0x08 0x06 0x06 0x02 0x04
+  u8 height;    // Height in tiles: 0x08 0x06 0x02 0x02 0x04
+  u8 frames;    // Frame count:     0x04 0x04 0x02 0x02 0x04
+  u8 unk1;      // Unknown:         0x01 0x01 0x01 0x01 0x01
+  u8 hitbox_w;  // Hitbox width:    0x08 0x00 0x00 0x00 0x00
+  u8 hitbox_h;  // Hitbox height:   0x08 0x00 0x00 0x00 0x00
+  u8 unk4;      // Unknown frames:  0x03 0x04 0x02 0x02 0x04
 };
+
 
 typedef struct _ERAPI_BACKGROUND ERAPI_BACKGROUND;
 struct _ERAPI_BACKGROUND
@@ -262,6 +263,28 @@ struct _ERAPI_BACKGROUND
 //            a: u8 Angle
 //            d: u16 Multiply
 //            Return: s16 Result
+
+#define ERAPI_SpriteSetFrameBank(a,b)                     ERAPI_FUNC_X3( 0x237, a, b)
+//            a: u16 Sprite Handle
+//            b: u8 Bank Index
+// Pokèmon system sprites have 3 banks, 0 = facing left, 1 = facing front, 2 = facing right.
+// typedef struct _ERAPI_SPRITE ERAPI_SPRITE;
+
+#define ERAPI_SpriteSetHitboxSize(a,b,c)                  ERAPI_FUNC_X4( 0x258, a, ((b)>>1), ((c)>>1))
+//            a: u16 Sprite Handle
+//            b: u8 Width
+//            c: u8 Height
+
+#define ERAPI_SpriteCheckCollision(a,b)                   ERAPI_FUNC_X3( 0x241, a, b)
+//            a: u16 Sprite Handle
+//            b: u16 Sprite Handle
+//            Return: u8 Collision (0: no, 1: yes)
+
+#define ERAPI_SpriteFindCollisions(a,b,c)                 ERAPI_FUNC_X4( 0x2E5, a, b, (u32)c)
+//            a: u16 Sprite Handle
+//            b: u8 Type
+//            c: u32* Sprite Handles (not u16*)
+//            Return: u8 Number of sprites
 
 #endif
 
