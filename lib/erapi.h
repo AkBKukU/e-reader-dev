@@ -151,6 +151,8 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 //            a: Sprite Handle
 //            b: Background Layer
 //            c: Sprite Palette pointer
+#define ERAPI_SpriteToggleVisible(a)		          ERAPI_FUNC_X2( 0x297, a)
+//            a: Sprite Handle
 #define ERAPI_SpriteShow(a)			          ERAPI_FUNC_X2( 0x246, a)
 //            a: Sprite Handle
 #define ERAPI_SpriteHide(a)			          ERAPI_FUNC_X2( 0x247, a)
@@ -165,7 +167,12 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 #define ERAPI_SpriteAutoScaleBySize(a,b,c)     	          ERAPI_FUNC_X4( 0x25C, a, b, c)
 #define ERAPI_HANDLE_SpriteAutoScaleWidthUntilSize(a,b,c) ERAPI_FUNC_X4( 0x25D, a, b, c)
 #define ERAPI_SpriteAutoScaleHeightBySize(a,b,c)	  ERAPI_FUNC_X4( 0x25E, a, b, c)
+#define ERAPI_GetSpriteVisible(a)                         ERAPI_FUNC_X2( 0x2D8, a)
+//            a: Sprite Handle
 #define ERAPI_SetSpriteVisible(a,b)                       ERAPI_FUNC_X3( 0x266, a, b)
+//            a: Sprite Handle
+//            b: 0 = Hide , 1 = Show
+//            NOTE - Not recommended, use ERAPI_SpriteShow/ERAPI_SpriteHide instead
 #define ERAPI_SetBackgroundPalette(a,b,c)                 ERAPI_FUNC_X4( 0x27E, (u32)a, b, c)
 #define ERAPI_GetBackgroundPalette(a,b,c)                 ERAPI_FUNC_X4( 0x27F, (u32)a, b, c)
 #define ERAPI_SetSpritePalette(a,b,c)                     ERAPI_FUNC_X4( 0x280, a, b, c)
