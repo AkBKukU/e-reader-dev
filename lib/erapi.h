@@ -62,6 +62,13 @@ struct _ERAPI_BACKGROUND
   u16 palettes; // Palette count
 };
 
+
+typedef void * (*FUNC_ERAPI_MemAlloc)(u32 size);
+typedef void   (*FUNC_ERAPI_MemFree)(void *ptr);
+
+static const FUNC_ERAPI_MemAlloc ERAPI_MemAlloc = (FUNC_ERAPI_MemAlloc)(0x0080055B0 + 1);
+static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 + 1);
+
 //#define ERAPI_STUB
 
 #ifndef ERAPI_STUB
@@ -186,7 +193,7 @@ struct _ERAPI_BACKGROUND
 //            e: start y position in pixels
 //            f: frame count to draw line over
 
-#define ERAPI_DrawRect(a,b,c,d,e,f)                       ERAPI_FUNC_X4( 0x296, (a << 8) | f, (b << 8) | c, (d << 8) | e)
+#define ERAPI_DrawRect(a,b,c,d,e)                       ERAPI_FUNC_X4( 0x296,  a, (b << 8) | c, (d << 8) | e)
 #define ERAPI_SetTextColor(a,b,c)                         ERAPI_FUNC_X3( 0x298, a, (b << 8) | c)
 #define ERAPI_DrawText(a,b,c,d)                           ERAPI_FUNC_X4( 0x299, a, (b << 8) | c, (u32)d)
 //            a: Region
