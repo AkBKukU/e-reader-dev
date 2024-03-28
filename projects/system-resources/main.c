@@ -64,7 +64,7 @@ char* citoa(int num, char* str, int base)
 {
 	int i = 0;
  
-    bool isNegative = false;
+    u8 isNegative = 0;
 	/* Handle 0 explicitly, otherwise empty string is
 	 * printed for 0 */
 	if (num == 0) {
@@ -77,7 +77,7 @@ char* citoa(int num, char* str, int base)
     // only with base 10. Otherwise numbers are
     // considered unsigned.
     if (num < 0 && base == 10) {
-        isNegative = true;
+        isNegative = 1;
         num = -num;
     }
  
