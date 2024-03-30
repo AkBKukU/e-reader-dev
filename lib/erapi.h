@@ -126,6 +126,15 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 //            a: Background Layer
 #define ERAPI_LoadBackgroundCustom(a,b)                   ERAPI_FUNC_X3( 0x22D, a, (u32)b)
 #define ERAPI_SpriteCreateSystem(a,b)                     ERAPI_FUNC_X3( 0x230, a, b)
+#define ERAPI_SystemSpriteNumberIsValid(a)                ERAPI_FUNC_X2( 0x2F0, a)
+// Checks if a system sprite number is valid.
+//            a: u16 System Sprite Number (0-610 or 4096-4337)
+//            Return: u8 Valid (0: no, 1: yes)
+// clears array of cached system sprite pointers (USA)
+#define ERHACK_SystemSpriteClearUS() ((void(*)(void))(0x08022820 + 1))()
+// clears array of cached system sprite pointers (JPN+)
+#define ERHACK_SystemSpriteClearJPN() ((void(*)(void))(0x080237C4 + 1))()
+
 #define ERAPI_SpriteFree(a)                               ERAPI_FUNC_X2( 0x231, a)
 #define ERAPI_SetSpritePos(a,b,c)                         ERAPI_FUNC_X4( 0x232, a, b, c)
 #define ERAPI_SpriteFrameNext(a)                          ERAPI_FUNC_X2( 0x234, a)
@@ -319,6 +328,80 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 //            b: u8 Type
 //            c: u32* Sprite Handles (not u16*)
 //            Return: u8 Number of sprites
+
+
+typedef struct _ERAPI_BACKGROUND_DRAW_NUMBER ERAPI_BACKGROUND_DRAW_NUMBER;
+struct _ERAPI_BACKGROUND_DRAW_NUMBER
+{
+    u8 bg; // background layer (0-3)
+    u8 pal; // palette index
+    u8 x; // x in tiles
+    u8 y; // y in tiles
+    u16 system_sprite_number; // system sprite to use (4107, 4112, 4120, 4121, 4135, 4137, 4141, 4142, 4149, 4151, 4157, 4189, 4191, 4196, 4200, 4201, 4202 or 4203)
+    u8 amount_digits; // amount of digits to draw
+    u8 amount_extra_zeroes; // amount of extra zero digits to draw on the right (so basically draws number times 10, 100, 1000, ...)
+    u8 fill; // 0: use spaces, 1: use zeroes
+    u8 loaded_sprite; // stores the loaded/copied sprite tiles index (0-7)
+    u16 value;
+};
+
+#define ERAPI_BackgroundDrawNumber(a)                     ERAPI_FUNC_X2( 0x26B, (u32)a)
+// First loads/copies system sprite tiles and then draws number.
+//            a: ERAPI_BACKGROUND_DRAW_NUMBER* Args
+
+#define ERAPI_BackgroundDrawNumberNewValue(a,b)           ERAPI_FUNC_X3( 0x26C, (u32)a, b)
+// First updates number value and then draws number.
+//            a: ERAPI_BACKGROUND_DRAW_NUMBER* Args
+//            b: u16 New Value
+
+#define ERAPI_BackgroundDrawNumberIncValue(a,b)           ERAPI_FUNC_X3( 0x26D, (u32)a, b)
+// First updates number value and then draws number.
+//            a: ERAPI_BACKGROUND_DRAW_NUMBER* Args
+//            b: u16 Increase Value
+
+#define ERAPI_BackgroundDrawNumberGetValue(a)             ERAPI_FUNC_X2( 0x26E, a)
+// Get current number value. Does not draw number.
+//            a: ERAPI_BACKGROUND_DRAW_NUMBER* Args
+//            Return: u16 Number
+
+#define ERAPI_BackgroundDrawNumberBlink(a,b)              ERAPI_FUNC_X3( 0x272, (u32)a, b)
+// Changes blink speed.
+//            a: ERAPI_BACKGROUND_DRAW_NUMBER* Args
+//            b: u16 Speed (higher is slower)
+
+typedef struct _ERAPI_BACKGROUND_DRAW_TIME ERAPI_BACKGROUND_DRAW_TIME;
+struct _ERAPI_BACKGROUND_DRAW_TIME
+{
+    u8 bg; // background layer (0-3)
+    u8 pal; // palette index
+    u8 x; // x in tiles
+    u8 y; // y in tiles
+    u16 system_sprite_number; // system sprite to use (4107, 4112, 4120, 4121, 4135, 4137, 4141, 4142, 4149, 4151, 4157, 4189, 4191, 4196, 4200, 4201, 4202 or 4203)
+    u8 separator; // 10="." 11=":" 12="/" 13="-"
+    u8 format; // 0="mm:ss:ff" 1="mm:ss" 2="mmss" 3="mm" 4="mm:ss" 5="mm" 6="mm" 7="" (mm: minutes, ss: seconds: ff: hundreds of a second)
+    u16 value; // value in frames (60 frames = 1 second)
+    u8 loaded_sprite; // stores the loaded/copied sprite tiles index (0-7)
+};
+
+#define ERAPI_BackgroundDrawTime(a)                       ERAPI_FUNC_X2( 0x26F, (u32)a)
+// First loads/copies system sprite tiles and then draws time.
+//            a: ERAPI_BACKGROUND_DRAW_TIME* Args
+
+#define ERAPI_BackgroundDrawTimeNewValue(a,b)             ERAPI_FUNC_X3( 0x270, (u32)a, b)
+// First updates time value and then draws time.
+//            a: ERAPI_BACKGROUND_DRAW_TIME* Args
+//            b: u16 New Value
+
+#define ERAPI_BackgroundDrawTimeIncValue(a,b)             ERAPI_FUNC_X3( 0x271, (u32)a, b)
+// First updates time value and then draws time.
+//            a: ERAPI_BACKGROUND_DRAW_TIME* Args
+//            b: u16 Increase Value
+
+#define ERAPI_BackgroundDrawTimeBlink(a,b)                ERAPI_FUNC_X3( 0x273, (u32)a, b)
+// Changes blink speed.
+//            a: ERAPI_BACKGROUND_DRAW_TIME* Args
+//            b: u16 Speed (higher is slower)
+
 
 #endif
 
