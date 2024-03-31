@@ -186,6 +186,9 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 #define ERAPI_GetBackgroundPalette(a,b,c)                 ERAPI_FUNC_X4( 0x27F, (u32)a, b, c)
 #define ERAPI_SetSpritePalette(a,b,c)                     ERAPI_FUNC_X4( 0x280, a, b, c)
 #define ERAPI_GetSpritePalette(a,b,c)                     ERAPI_FUNC_X4( 0x281, (u32)a, b, c)
+#define ERAPI_SpriteSetPaletteIndex(a,b)                  ERAPI_FUNC_X3( 0x2E7, a, b)
+//            a: u16 Sprite Handle
+//            b: u8 Palette Index (0-15)
 #define ERAPI_ClearPalette()                              ERAPI_FUNC_X1( 0x282)
 #define ERAPI_CreateRegion(a,b,c,d,e,f)                   ERAPI_FUNC_X4( 0x290, (a << 8) | b, (c << 8) | d, (e << 8) | f)
 //            a: 0,2=normal, 1,4,5,6,10=nothing, 3=messes with background tile memory
