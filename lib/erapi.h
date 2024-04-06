@@ -101,6 +101,7 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 #define ERAPI_GetExitCount()                              ERAPI_FUNC_X1( 0x11D)
 #define ERAPI_PlaySoundCustom(a,b)                        ERAPI_FUNC_X3( 0x12F, (u32)a, b)
 #define ERAPI_PlaySoundCustomEx(a,b,c)                    ERAPI_FUNC_X4( 0x131, (u32)a, b, c)
+#define ERAPI_ClearSpritesAndBackgrounds()                ERAPI_FUNC_X1( 0x135)
 #define ERAPI_FadeIn(a)                                   ERAPI_FUNC_X2( 0x200, a)
 //            a: Frame count for animation
 #define ERAPI_FadeOut(a)                                  ERAPI_FUNC_X2( 0x201, a)
@@ -237,6 +238,7 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 //            d: y position in tiles
 //            e: width in tiles
 //            f: height in tiles
+#define ERHACK_RegionListClearUS() ((void(*)(void))(0x08037CC0 + 1))()
 #define ERAPI_SetRegionColor(a,b)                         ERAPI_FUNC_X3( 0x291, a, b)
 //            a: Region
 //            b: Color code
