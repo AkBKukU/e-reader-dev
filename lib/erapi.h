@@ -291,6 +291,13 @@ static const FUNC_ERAPI_MemFree ERAPI_MemFree = (FUNC_ERAPI_MemFree)(0x08005598 
 #define ERAPI_FlashReadSectorSingle(a,b)                  ERAPI_FUNC_X3( 0x2DF, a, (u32)b)
 //            a: Sector index
 //            a: Pointer to read data into
+#define ERAPI_FlashLoadUserData(a,b)                      ERAPI_FUNC_X3( 0x11B, a, (u32)b)
+//            a: u16 Index (0-249) (Beware: 0-23 are already used by the Pokémon mini-games)
+//            b: u8 *Data (16 bytes)
+
+#define ERAPI_FlashSaveUserData(a,b)                      ERAPI_FUNC_X3( 0x11C, a, (u32)b)
+//            a: u16 Index (0-249) (Beware: 0-23 are already used by the Pokémon mini-games)
+//            b: u8 *Data (16 bytes)
 #define ERAPI_SoftReset()                                 ERAPI_FUNC_X1( 0x2E0)
 #define ERAPI_InitMemory(a)                               ERAPI_FUNC_X2( 0x2EA, a)
 #define ERAPI_FlashWriteSectorMulti(a,b,c)                ERAPI_FUNC_X4( 0x2ED, a, b, c)
